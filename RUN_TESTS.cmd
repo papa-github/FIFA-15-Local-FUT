@@ -33,15 +33,35 @@ if not defined PY (
     exit /b 1
 )
 
-%PY% "%~dp0tests\golden_runner.py" %*
-set "RC=%ERRORLEVEL%"
+set "RC=0"
 
-if not "%RC%"=="0" (
+rem 1. Undefined names. Fastest check, and the one that catches a refactor
+rem    leaving a reference behind when the definition moved to another module.
+echo [1/3] undefined-name check
+%PY% "%~dp0tests\lint_names.py"
+if errorlevel 1 set "RC=1"
+
+rem 2. Recorded FUT responses. Covers route_fut - the FUT HTTP path.
+echo.
+echo [2/3] golden responses
+%PY% "%~dp0tests\golden_runner.py" %*
+if errorlevel 1 set "RC=1"
+
+rem 3. LSX handshake. NOT covered by the golden snapshots, and the path whose
+rem    breakage freezes FIFA on the language select screen.
+echo.
+echo [3/3] LSX smoke
+%PY% "%~dp0tests\lsx_smoke.py"
+if errorlevel 1 set "RC=1"
+
+echo.
+if "%RC%"=="0" (
+    echo All checks passed.
+) else (
+    echo One or more checks FAILED - see above.
     echo.
-    echo Snapshots differ from what the server returns now.
-    echo If the change was intentional, re-record with:
-    echo   RUN_TESTS.cmd --update
-    echo and check the resulting git diff before committing it.
+    echo If golden snapshots differ and the change was intentional, re-record
+    echo with "RUN_TESTS.cmd --update" and check the git diff before committing.
 )
 
 echo.
