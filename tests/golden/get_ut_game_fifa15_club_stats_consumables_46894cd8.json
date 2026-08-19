@@ -1,0 +1,247 @@
+{
+  "body": {
+    "consumables": 0,
+    "consumablesContract": 0,
+    "consumablesContractManager": 0,
+    "consumablesContractPlayer": 0,
+    "consumablesFitness": 0,
+    "consumablesFitnessPlayer": 0,
+    "consumablesFitnessTeam": 0,
+    "consumablesFormationManager": 0,
+    "consumablesHealing": 0,
+    "consumablesPlaystyle": 0,
+    "consumablesPosition": 0,
+    "consumablesTraining": 0,
+    "consumablesTrainingGk": 0,
+    "consumablesTrainingGkPlayStyle": 0,
+    "consumablesTrainingManager": 0,
+    "consumablesTrainingManagerLeagueModifier": 0,
+    "consumablesTrainingPlayer": 0,
+    "consumablesTrainingPlayerPlayStyle": 0,
+    "entries": [
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumables",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContract",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContractManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContractPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitness",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitnessPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitnessTeam",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFormationManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesHealing",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesPlaystyle",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesPosition",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTraining",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingGk",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingGkPlayStyle",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingManagerLeagueModifier",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingPlayerPlayStyle",
+        "typeValue": 0
+      }
+    ],
+    "stat": [
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumables",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContract",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContractManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesContractPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitness",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitnessPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFitnessTeam",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesFormationManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesHealing",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesPlaystyle",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesPosition",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTraining",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingGk",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingGkPlayStyle",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingManagerLeagueModifier",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingPlayer",
+        "typeValue": 0
+      },
+      {
+        "contextId": 6,
+        "contextValue": 0,
+        "type": "consumablesTrainingPlayerPlayStyle",
+        "typeValue": 0
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}
