@@ -4491,6 +4491,90 @@ def _offline_match_reward(doc: dict[str, Any], end_reason: str) -> dict[str, int
 
 
 
+# ---- FUT request dispatch -------------------------------------------------
+# route_fut grew into a 1600-line if/elif chain with 200 branches that every
+# request walks until one matches. Handlers register in this table instead, and
+# are found by pattern rather than by position.
+#
+# The conversion is incremental on purpose: _dispatch_fut runs first, and
+# anything it does not match falls through to the original chain untouched.
+# So endpoints move one at a time, each move independently verifiable against
+# the golden snapshots and independently revertible.
+
+
+@dataclass
+class FutRequest:
+    """A parsed FUT request. Built once per call, passed to the handler."""
+
+    method: str
+    raw_path: str
+    path: str
+    low: str
+    query: dict[str, list[str]]
+    headers: dict[str, str]
+    body: bytes
+    payload: Any
+
+
+# (allowed methods or None, compiled pattern, handler)
+_FUT_ROUTES: list[tuple[frozenset[str] | None, Any, Any]] = []
+
+
+def fut_route(pattern: str, methods: str | tuple[str, ...] | None = None):
+    """Register a handler for paths fullmatching `pattern`.
+
+    The pattern is matched against the lowercased, trailing-slash-stripped path
+    (`low`), the same value the chain compares against. Regex capture groups are
+    passed to the handler as extra positional arguments. `methods=None` accepts
+    any verb, matching the many chain branches that never checked one.
+    """
+    allowed: frozenset[str] | None = None
+    if methods is not None:
+        if isinstance(methods, str):
+            methods = (methods,)
+        allowed = frozenset(m.upper() for m in methods)
+
+    def register(fn):
+        _FUT_ROUTES.append((allowed, re.compile(pattern), fn))
+        return fn
+
+    return register
+
+
+def _dispatch_fut(req: FutRequest):
+    """Return a response tuple, or None to fall through to the chain."""
+    for allowed, pattern, handler in _FUT_ROUTES:
+        if allowed is not None and req.method.upper() not in allowed:
+            continue
+        matched = pattern.fullmatch(req.low)
+        if matched is not None:
+            return handler(req, *matched.groups())
+    return None
+
+
+@fut_route(r"/fut/packs/images/(?:kc|web)/packs_backgrounds_(\d+)\.png", "GET")
+def _route_pack_background(req: FutRequest, asset_id: str):
+    # Retail pack backgrounds requested directly by the FUT store.  These
+    # PNGs are extracted from this FIFA 15 build's own cards0.big; returning an
+    # empty JSON object here (v0.2.26 behavior) leaves the client with mismatched
+    # or missing pack art.
+    image_path = ROOT / "assets" / "packs" / f"packs_backgrounds_{int(asset_id)}.png"
+    if image_path.exists():
+        return 200, {"Content-Type": "image/png", "Cache-Control": "public, max-age=3600"}, image_path.read_bytes()
+    return 404, {"Content-Type": "text/plain"}, b"pack background not found"
+
+
+# Static client-side localization/config requests observed in FUT.
+@fut_route(r"/fut/loc/pc/leaderboards\.eng_us\.xml")
+def _route_leaderboards_loc(req: FutRequest):
+    return 404, {"Content-Type": "text/plain"}, b"not found"
+
+
+@fut_route(r"/fut/tutorials/cmn")
+def _route_tutorials_cmn(req: FutRequest):
+    return 404, {"Content-Type": "text/plain"}, b"not found"
+
+
 def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) -> tuple[int, dict[str, str], bytes]:
     # ProtoHttp sends the POW auth path with a double leading slash in the
     # successful FIFA 15 trace. urlsplit("//pow/auth") would otherwise treat
@@ -4517,17 +4601,13 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             body[:1000],
         )
 
-    # Retail pack backgrounds requested directly by the FUT store.  These
-    # PNGs are extracted from this FIFA 15 build's own cards0.big; returning an
-    # empty JSON object here (v0.2.26 behavior) leaves the client with mismatched
-    # or missing pack art.
-    pack_img = re.fullmatch(r"/fut/packs/images/(?:kc|web)/packs_backgrounds_(\d+)\.png", low)
-    if pack_img and method == "GET":
-        asset_id = int(pack_img.group(1))
-        image_path = ROOT / "assets" / "packs" / f"packs_backgrounds_{asset_id}.png"
-        if image_path.exists():
-            return 200, {"Content-Type":"image/png", "Cache-Control":"public, max-age=3600"}, image_path.read_bytes()
-        return 404, {"Content-Type":"text/plain"}, b"pack background not found"
+    # Table-driven handlers first; unmatched requests fall through to the chain.
+    dispatched = _dispatch_fut(FutRequest(
+        method=method, raw_path=raw_path, path=path, low=low,
+        query=query, headers=headers, body=body, payload=payload,
+    ))
+    if dispatched is not None:
+        return dispatched
 
     # ---- POW / EASFC bootstrap --------------------------------------------
     if low == "/pow/auth":
@@ -4611,10 +4691,7 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         })
 
     # Static client-side localization/config requests observed in FUT.
-    if low == "/fut/loc/pc/leaderboards.eng_us.xml":
-        return 404, {"Content-Type": "text/plain"}, b"not found"
-    if low == "/fut/tutorials/cmn":
-        return 404, {"Content-Type": "text/plain"}, b"not found"
+    # (leaderboards.eng_us.xml and tutorials/cmn are now table-driven above)
     if low == "/fut/packs/loc/storepackdescriptions.en_us.xml":
         # FUT store pack localization is an XLIFF translation file.
         # The native client resolves the visible title/description through

@@ -24,6 +24,30 @@
     "observed_status": 404
   },
   {
+    "name": "get_fut_packs_images_kc_packs_backgrounds_1_png_15174778",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/packs/images/kc/packs_backgrounds_1.png",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_fut_packs_images_kc_packs_backgrounds_12345_png_1bbf4c72",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/packs/images/kc/packs_backgrounds_12345.png",
+    "body_b64": "",
+    "observed_status": 404
+  },
+  {
+    "name": "get_fut_packs_images_web_packs_backgrounds_99_png_c12fa1bb",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/packs/images/web/packs_backgrounds_99.png",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
     "name": "get_fut_packs_loc_storepackdescriptions_en_us_xml_66bafa56",
     "service": "fut",
     "method": "GET",
