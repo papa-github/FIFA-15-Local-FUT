@@ -4687,6 +4687,91 @@ def _route_tradepile(req: FutRequest):
     return 200, {"Cache-Control": "no-store"}, json_bytes(response)
 
 
+@fut_route(r"/ut/game/fifa15/user/accountinfo")
+def _route_user_accountinfo(req: FutRequest):
+    low = req.low
+    return 200, {}, json_bytes({
+        "userAccountInfo": {
+            "personas": [{
+                "personaId": int(CFG["persona_id"]),
+                "personaName": str(_persona_name()),
+                "userClubList": [{
+                    "year": "2015",
+                    "platform": "pc",
+                    "clubName": str(_club_name()),
+                    "established": int(STATE.get("established", now_s()) or now_s()),
+                    "assetId": int(CFG["club_id"]),
+                    "clubAbbr": str(_club_abbr()),
+                }],
+                "returningUser": 1,
+            }]
+        }
+    })
+
+@fut_route(r"/ut/game/fifa15/hub")
+def _route_hub(req: FutRequest):
+    low = req.low
+    user_auctions = STATE.list_user_auctions()
+    selling = sum(1 for x in user_auctions if str(x.get("state")) == "active")
+    sold = sum(1 for x in user_auctions if str(x.get("state")) == "sold")
+    ai_live = _market_live_count()
+    return 200, {}, json_bytes({
+        "auctionCount": ai_live + selling,
+        "liveTransfers": ai_live + selling,
+        "clubPlayers": len(STATE.list_items("club")) + len(STATE.list_items("squad")),
+        "tradePile": {"count": STATE.transfer_list_count(), "selling": selling, "sold": sold, "maximum": 100},
+        "watchlist": {"count": 0, "outbid": 0, "winning": 0},
+        "squad": _native_squad(),
+    })
+
+@fut_route(r"/ut/game/fifa15/clubuser")
+def _route_clubuser(req: FutRequest):
+    low = req.low
+    players = [
+        x for x in (STATE.list_items("club") + STATE.list_items("squad"))
+        if str(x.get("itemType", "player")) == "player"
+    ]
+    players.sort(key=lambda x: (
+        -int(x.get("rating", 0) or 0), -int(x.get("rareflag", 0) or 0),
+        int(x.get("id", 0) or 0)
+    ))
+    consumables = [
+        x for x in STATE.list_items("club")
+        if str(x.get("itemType", "player")) != "player"
+        and int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE
+    ]
+    player_wire = [_native_player_item(x) for x in players[:50]]
+    consumable_wire = [_native_consumable_item(x, pile=7) for x in consumables]
+    preload = player_wire + consumable_wire
+    log.warning(
+        "CLUBUSER CACHE native players=%s consumables=%s total=%s consumableFamilies=%s",
+        len(player_wire), len(consumable_wire), len(preload),
+        sorted({_consumable_family_from_item(x) for x in consumables}),
+    )
+    return 200, {"Cache-Control": "no-store"}, json_bytes({
+        "user": [{
+            "persona": str(_persona_name()),
+            "personaId": int(CFG["persona_id"]),
+            "public": True,
+        }],
+        "itemData": preload,
+        "total": len(players) + len(consumables),
+        "count": len(preload),
+        "start": 0,
+    })
+
+@fut_route(r"/ut/game/fifa15/watchlist")
+def _route_watchlist(req: FutRequest):
+    method, low = req.method, req.low
+    if method == "GET":
+        return 200, {}, json_bytes({
+            "auctionInfo": [], "itemData": [], "total": 0, "count": 0,
+            "winning": 0, "outbid": 0, "credits": STATE.credits(),
+        })
+    if method in ("POST", "PUT", "DELETE"):
+        return 200, {}, json_bytes({"success": True, "auctionInfo": [], "credits": STATE.credits()})
+
+
 def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) -> tuple[int, dict[str, str], bytes]:
     # ProtoHttp sends the POW auth path with a double leading slash in the
     # successful FIFA 15 trace. urlsplit("//pow/auth") would otherwise treat
@@ -4759,24 +4844,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             }]
         })
 
-    if low == "/ut/game/fifa15/user/accountinfo":
-        return 200, {}, json_bytes({
-            "userAccountInfo": {
-                "personas": [{
-                    "personaId": int(CFG["persona_id"]),
-                    "personaName": str(_persona_name()),
-                    "userClubList": [{
-                        "year": "2015",
-                        "platform": "pc",
-                        "clubName": str(_club_name()),
-                        "established": int(STATE.get("established", now_s()) or now_s()),
-                        "assetId": int(CFG["club_id"]),
-                        "clubAbbr": str(_club_abbr()),
-                    }],
-                    "returningUser": 1,
-                }]
-            }
-        })
 
     if low == "/ut/game/fifa15/user/club" and method in ("PUT", "POST"):
         src = payload if isinstance(payload, dict) else {}
@@ -5187,56 +5254,7 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             return 200, {"Cache-Control": "no-store"}, json_bytes(_native_squad(int(saved.get("id", sid) or sid)))
 
 
-    if low == "/ut/game/fifa15/hub":
-        user_auctions = STATE.list_user_auctions()
-        selling = sum(1 for x in user_auctions if str(x.get("state")) == "active")
-        sold = sum(1 for x in user_auctions if str(x.get("state")) == "sold")
-        ai_live = _market_live_count()
-        return 200, {}, json_bytes({
-            "auctionCount": ai_live + selling,
-            "liveTransfers": ai_live + selling,
-            "clubPlayers": len(STATE.list_items("club")) + len(STATE.list_items("squad")),
-            "tradePile": {"count": STATE.transfer_list_count(), "selling": selling, "sold": sold, "maximum": 100},
-            "watchlist": {"count": 0, "outbid": 0, "winning": 0},
-            "squad": _native_squad(),
-        })
 
-    if low == "/ut/game/fifa15/clubuser":
-        # CardsDLL uses clubUser as a face-card/apply-consumable cache bootstrap.
-        # Return the owned player page plus every owned consumable so opening
-        # Apply Consumable on a squad player has the card definitions available.
-        players = [
-            x for x in (STATE.list_items("club") + STATE.list_items("squad"))
-            if str(x.get("itemType", "player")) == "player"
-        ]
-        players.sort(key=lambda x: (
-            -int(x.get("rating", 0) or 0), -int(x.get("rareflag", 0) or 0),
-            int(x.get("id", 0) or 0)
-        ))
-        consumables = [
-            x for x in STATE.list_items("club")
-            if str(x.get("itemType", "player")) != "player"
-            and int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE
-        ]
-        player_wire = [_native_player_item(x) for x in players[:50]]
-        consumable_wire = [_native_consumable_item(x, pile=7) for x in consumables]
-        preload = player_wire + consumable_wire
-        log.warning(
-            "CLUBUSER CACHE native players=%s consumables=%s total=%s consumableFamilies=%s",
-            len(player_wire), len(consumable_wire), len(preload),
-            sorted({_consumable_family_from_item(x) for x in consumables}),
-        )
-        return 200, {"Cache-Control": "no-store"}, json_bytes({
-            "user": [{
-                "persona": str(_persona_name()),
-                "personaId": int(CFG["persona_id"]),
-                "public": True,
-            }],
-            "itemData": preload,
-            "total": len(players) + len(consumables),
-            "count": len(preload),
-            "start": 0,
-        })
 
 
     if low.startswith("/ut/game/fifa15/club/consumables"):
@@ -5540,17 +5558,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         })
 
     # ---- Local AI Transfer Market ---------------------------------------
-    if low == "/ut/game/fifa15/watchlist":
-        # FIFA polls this when moving from search results to Transfer Targets.
-        # Bidding persistence comes later; an explicit native-shaped empty list
-        # is better than letting it fall into the generic unknown-route handler.
-        if method == "GET":
-            return 200, {}, json_bytes({
-                "auctionInfo": [], "itemData": [], "total": 0, "count": 0,
-                "winning": 0, "outbid": 0, "credits": STATE.credits(),
-            })
-        if method in ("POST", "PUT", "DELETE"):
-            return 200, {}, json_bytes({"success": True, "auctionInfo": [], "credits": STATE.credits()})
 
     if low == "/ut/game/fifa15/transfermarket" and method == "GET":
         if bool(CFG.get("ai_market_enabled", True)):
