@@ -1,0 +1,10 @@
+{
+  "body": {
+    "credits": 0,
+    "success": true,
+    "tradeIdList": []
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

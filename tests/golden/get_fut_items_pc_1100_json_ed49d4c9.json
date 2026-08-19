@@ -1,0 +1,20 @@
+{
+  "body": {
+    "itemData": [
+      {
+        "assetId": 1100,
+        "assetName": "trophy_1100_gold",
+        "id": 1100,
+        "image": "trophy_1100_gold",
+        "itemType": "trophy",
+        "name": "trophy_1100_gold",
+        "resourceId": 1100
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

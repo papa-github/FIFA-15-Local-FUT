@@ -1,0 +1,16 @@
+{
+  "body": {
+    "coins": 0,
+    "credits": 0,
+    "endReason": "NO_CONTEST",
+    "items": [],
+    "matchData": "",
+    "matchDifficulty": 1,
+    "secondsPlayed": 0
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

@@ -1,0 +1,26 @@
+{
+  "body": {
+    "userAccountInfo": {
+      "personas": [
+        {
+          "personaId": "<EPOCH_S>",
+          "personaName": "LocalPlayer",
+          "returningUser": 1,
+          "userClubList": [
+            {
+              "assetId": 1,
+              "clubAbbr": "LCL",
+              "clubName": "Local FC",
+              "established": "<EPOCH_S>",
+              "platform": "pc",
+              "year": "2015"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

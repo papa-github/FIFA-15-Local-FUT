@@ -1,0 +1,9 @@
+{
+  "body": {
+    "event": [],
+    "timestamp": "<EPOCH_S>"
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

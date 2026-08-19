@@ -1,0 +1,10 @@
+{
+  "body_kind": "opaque",
+  "body_len": 2802,
+  "body_sha256_32": "9173381928582f52907ecd62d14dbd7b",
+  "headers": {
+    "Cache-Control": "no-store",
+    "Content-Type": "application/octet-stream"
+  },
+  "status": 200
+}

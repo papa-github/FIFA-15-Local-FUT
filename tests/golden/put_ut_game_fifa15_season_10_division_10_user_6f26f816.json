@@ -1,0 +1,12 @@
+{
+  "body": {
+    "divisionId": 1,
+    "round": 1,
+    "seasonId": 10
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

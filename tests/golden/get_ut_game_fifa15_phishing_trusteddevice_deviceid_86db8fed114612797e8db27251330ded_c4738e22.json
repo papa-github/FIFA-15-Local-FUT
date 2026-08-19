@@ -1,0 +1,16 @@
+{
+  "body": {
+    "answerRequired": false,
+    "attempts": 0,
+    "changed": false,
+    "completed": true,
+    "exists": true,
+    "isTrusted": true,
+    "locked": false,
+    "token": "fut15-local-phishing-token",
+    "trusted": true
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

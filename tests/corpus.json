@@ -1,0 +1,562 @@
+[
+  {
+    "name": "get_fut_items_images_trophies_kc_item_big_706d2577",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/items/images/trophies/kc/item.big",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_fut_items_pc_1100_json_ed49d4c9",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/items/pc/1100.json",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_fut_loc_pc_leaderboards_eng_us_xml_8588ad62",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/loc/PC/leaderboards.ENG_US.xml",
+    "body_b64": "",
+    "observed_status": 404
+  },
+  {
+    "name": "get_fut_packs_loc_storepackdescriptions_en_us_xml_66bafa56",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/packs/loc/storepackdescriptions.en_us.xml",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_fut_tutorials_cmn_6553c861",
+    "service": "fut",
+    "method": "GET",
+    "path": "/fut/tutorials/cmn",
+    "body_b64": "",
+    "observed_status": 404
+  },
+  {
+    "name": "get_pow_activity_count_offset_0_count_300_509c2209",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/activity/count?offset=0&count=300",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_bank_currency_pow_funds_cap_info_b4cee9aa",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/bank/currency/pow_funds/cap/info",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_bank_user_account_ef833b78",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/bank/user/account",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_communication_all_self_true_friendtiergp_personaid_friendtiertp_1000000002_offset_0_count_5__1ed6f86d",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/communication/all?self=true&friendtiergp=PersonaId&friendtiertp=1000000002&offset=0&count=5&ed=20260819T110805Z",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_communication_all_self_true_friendtiergp_personaid_friendtiertp_1000000002_offset_0_count_5__db36e0dc",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/communication/all?self=true&friendtiergp=PersonaId&friendtiertp=1000000002&offset=0&count=5&ed=20431108T162217Z",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_communication_all_self_true_friendtiergp_personaid_friendtiertp_1000000002_offset_0_count_5__98ae3b17",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/communication/all?self=true&friendtiergp=PersonaId&friendtiertp=1000000002&offset=0&count=5&ed=20431108T162349Z",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_communication_all_self_true_friendtiergp_personaid_friendtiertp_1000000002_offset_0_count_5__484b0cc6",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/communication/all?self=true&friendtiergp=PersonaId&friendtiertp=1000000002&offset=0&count=5&ed=20431108T162551Z",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_communication_count_offset_0_count_300_eaf5712d",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/communication/count?offset=0&count=300",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_healthcheck_system_all_006e08d1",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/healthcheck/system/all",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_inventory_item_list_offset_0_count_50_610e74e4",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/inventory/item/list?offset=0&count=50",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_lvl_user_tiergp_businessunit_tiertp_fifa_self_true_42306bcc",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/lvl/user/tiergp/businessunit/tiertp/fifa?self=true",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_lvl_weight_tiergp_businessunit_tiertp_fifa_gametitle_fifa15_0477a4bd",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/lvl/weight/tiergp/businessunit/tiertp/fifa?gametitle=fifa15",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_mm_game_fifa15_message_list_offset_0_count_5_screen_easfcnewsalerts_cb8e23bc",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/mm/game/fifa15/message/list?offset=0&count=5&screen=easfcnewsalerts",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_mm_game_fifa15_message_list_offset_0_count_5_screen_fifahubgen4_5f7b8359",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/mm/game/fifa15/message/list?offset=0&count=5&screen=fifahubgen4",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_mm_game_fifa15_message_list_offset_0_count_5_screen_futhubgen4_599b2d9f",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/mm/game/fifa15/message/list?offset=0&count=5&screen=futhubgen4",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_news_count_unread_1cefed6c",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/news/count/unread",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_news_user_self_true_friends_true_friendtiergp_personaid_friendtiertp_1000000002_shared_true__fe667a49",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/news/user?self=true&friends=true&friendtiergp=PersonaId&friendtiertp=1000000002&shared=true&count=7&includeActions=true&edt=20431108T155227Z&extras=userLike&sku=FFA15PCC",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_news_user_self_true_friends_true_friendtiergp_personaid_friendtiertp_1000000002_shared_true__ca0db322",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/news/user?self=true&friends=true&friendtiergp=PersonaId&friendtiertp=1000000002&shared=true&count=7&includeActions=true&edt=20431108T162218Z&extras=userLike&sku=FFA15PCC",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_news_user_self_true_friends_true_friendtiergp_personaid_friendtiertp_1000000002_shared_true__b4dbea3b",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/news/user?self=true&friends=true&friendtiergp=PersonaId&friendtiertp=1000000002&shared=true&count=7&includeActions=true&edt=20431108T162647Z&extras=userLike&sku=FFA15PCC",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_pfyc_user_self_true_friendtiergp_personaid_friendtiertp_1000000002_da8fb48e",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/pfyc/user?self=true&friendtiergp=PersonaId&friendtiertp=1000000002",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_store_game_fifa15_catalog_0_item_list_offset_0_count_50_ae69fb61",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/store/game/fifa15/catalog/0/item/list?offset=0&count=50",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_pow_store_game_fifa15_catalog_list_28fa2535",
+    "service": "fut",
+    "method": "GET",
+    "path": "/pow/store/game/fifa15/catalog/list",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_loanplayerreward_0432d3cb",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/loanPlayerReward",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_managerquest_5948303a",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/managerquest",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_pilesize_c6323b89",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/pileSize",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_totw_9410d873",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/totw",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_tutorialpopups_439dbcb3",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/tutorialpopups",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clientdata_userhubdata_cae1b2bb",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clientdata/userHubData",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_club_stats_newcards_24c16d35",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/club/stats/newcards",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_clubuser_5c118ed8",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/clubUser",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_eventfeed_8e7dabfb",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/eventfeed",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_hub_cf57fba8",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/hub",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_loan_players_eff2fa46",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/loan/players",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_phishing_trusteddevice_deviceid_86db8fed114612797e8db27251330ded_c4738e22",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/phishing/trusteddevice?deviceId=86db8fed114612797e8db27251330ded",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_purchased_items_6d5792c8",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/purchased/items",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_season_list_active_true_count_99_divisionlist_10_type_offline_bdae3775",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/season/list?active=true&count=99&divisionList=10&type=offline",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_season_user_history_type_offline_d42607c6",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/season/user/history?type=offline",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_season_user_type_offline_2771fe8d",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/season/user?type=offline",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_settings_e1ffc44a",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/settings",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_squad_active_active_true_e7fd5a86",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/squad/active?active=true",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_store_purchasegroup_all_ppinfo_true_dadb4e14",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/store/purchasegroup/all?ppInfo=true",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_trade_status_tradeids_650000000001_5143f613",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/trade/status?tradeIds=650000000001",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_tradepile_70f2f9a0",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/tradePile",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_user_1d0420ed",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/user",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_user_accountinfo_96154181",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/user/accountinfo",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_user_credits_d6306b58",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/user/credits",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_userdata_f9aa656e",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/userdata",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_v2_game_fifa15_store_transaction_b8d8df74",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/v2/game/fifa15/store/transaction",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_pow_auth_6ab0d782",
+    "service": "fut",
+    "method": "POST",
+    "path": "//pow/auth",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_pow_pfyc_user_club_id_1_immediate_true_65629d56",
+    "service": "fut",
+    "method": "POST",
+    "path": "/pow/pfyc/user/club?id=1&immediate=true",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_pow_v2_activity_shownews_true_0e62b98c",
+    "service": "fut",
+    "method": "POST",
+    "path": "/pow/v2/activity?showNews=true",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_ut_auth_e32b6914",
+    "service": "fut",
+    "method": "POST",
+    "path": "/ut/auth",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_ut_delete_auth_8f096833",
+    "service": "fut",
+    "method": "POST",
+    "path": "/ut/delete/auth",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_ut_delete_game_fifa15_item_35a476c0",
+    "service": "fut",
+    "method": "POST",
+    "path": "/ut/delete/game/fifa15/item",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_ut_game_fifa15_match_087ceff0",
+    "service": "fut",
+    "method": "POST",
+    "path": "/ut/game/fifa15/match",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "post_ut_game_fifa15_purchased_items_71e1fd1d",
+    "service": "fut",
+    "method": "POST",
+    "path": "/ut/game/fifa15/purchased/items",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_auctionhouse_relist_6c2dd2a9",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/auctionhouse/relist",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_clientdata_managerquest_f473db52",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/clientdata/managerquest",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_clientdata_userhubdata_efe7e541",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/clientdata/userHubData",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_item_edb5ad80",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/item",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_match_9a725eaa",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/match",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_match_end_7cd55f07",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/match/end",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_match_reset_88fee1bf",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/match/reset",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_season_10_division_10_user_6f26f816",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/season/10/division/10/user",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "put_ut_game_fifa15_squad_1_c461406d",
+    "service": "fut",
+    "method": "PUT",
+    "path": "/ut/game/fifa15/squad/1",
+    "body_b64": "",
+    "observed_status": 200
+  }
+]

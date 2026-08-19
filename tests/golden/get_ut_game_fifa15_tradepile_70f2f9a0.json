@@ -1,0 +1,30 @@
+{
+  "body": {
+    "activeCount": 0,
+    "auctionInfo": [],
+    "available": 0,
+    "coins": 0,
+    "count": 0,
+    "credits": 0,
+    "currentTradePileSize": 0,
+    "duplicateItemIdList": [],
+    "itemData": [],
+    "maxAuctionsAllowed": 100,
+    "maximumTradePileSize": 100,
+    "offered": 0,
+    "selling": 0,
+    "sold": 0,
+    "soldCount": 0,
+    "total": 0,
+    "totalCredits": 0,
+    "tradePileCount": 0,
+    "tradePileItems": 0,
+    "transferListCount": 0,
+    "unlisted": 0
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}
