@@ -288,6 +288,14 @@
     "observed_status": 200
   },
   {
+    "name": "get_ut_game_fifa15_club_stats_consumables_46894cd8",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/club/stats/consumables",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
     "name": "get_ut_game_fifa15_club_stats_newcards_24c16d35",
     "service": "fut",
     "method": "GET",
@@ -316,6 +324,14 @@
     "service": "fut",
     "method": "GET",
     "path": "/ut/game/fifa15/hub",
+    "body_b64": "",
+    "observed_status": 200
+  },
+  {
+    "name": "get_ut_game_fifa15_leaderboards_options_bdcefc47",
+    "service": "fut",
+    "method": "GET",
+    "path": "/ut/game/fifa15/leaderboards/options",
     "body_b64": "",
     "observed_status": 200
   },

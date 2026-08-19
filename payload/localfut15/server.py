@@ -4641,6 +4641,52 @@ def _route_user_credits(req: FutRequest):
     return 200, {}, json_bytes(_credits_payload())
 
 
+# Session and bootstrap endpoints.
+@fut_route(r"/pow/auth")
+def _route_pow_auth(req: FutRequest):
+    sid = _pow_sid()
+    return 200, {"X-POW-SID": sid}, json_bytes({
+        "sid": sid,
+        "serverTime": now_s(),
+        "lastOnlineTime": now_s(),
+    })
+
+
+@fut_route(r"/ut/auth")
+def _route_ut_auth(req: FutRequest):
+    if req.method == "DELETE":
+        return 200, {}, json_bytes({})
+    sid = _ut_sid()
+    return 200, {"X-UT-SID": sid}, json_bytes({"sid": sid, "protocol": "http"})
+
+
+@fut_route(r"/ut/game/fifa15/settings")
+def _route_settings(req: FutRequest):
+    return 200, {}, json_bytes({"configs": [
+        {"type": "IsStoreEnabled", "value": "1"},
+        {"type": "cardPackStoreEnabled", "value": "1"},
+        {"type": "pointsPackStoreEnabled", "value": "1"},
+    ]})
+
+
+@fut_route(r"/ut/game/fifa15/match/reset")
+def _route_match_reset(req: FutRequest):
+    # Retail calls this during ordinary FUT bootstrap too. Keep it a pure
+    # acknowledgement; do not alter the active offline-season save.
+    log.info("MATCH FLOW reset method=%s body=%s", req.method,
+             req.payload if isinstance(req.payload, dict) else {})
+    return 200, {}, json_bytes({"reset": True})
+
+
+@fut_route(r"/ut/game/fifa15/tradepile")
+def _route_tradepile(req: FutRequest):
+    response = _transfer_pile_payload()
+    log.warning("TRANSFER LIST response count=%s selling=%s sold=%s ids=%s",
+                response.get("count"), response.get("selling"), response.get("sold"),
+                [int(x.get("itemData", {}).get("id", 0) or 0) for x in response.get("auctionInfo", [])])
+    return 200, {"Cache-Control": "no-store"}, json_bytes(response)
+
+
 def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) -> tuple[int, dict[str, str], bytes]:
     # ProtoHttp sends the POW auth path with a double leading slash in the
     # successful FIFA 15 trace. urlsplit("//pow/auth") would otherwise treat
@@ -4676,13 +4722,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         return dispatched
 
     # ---- POW / EASFC bootstrap --------------------------------------------
-    if low == "/pow/auth":
-        sid = _pow_sid()
-        return 200, {"X-POW-SID": sid}, json_bytes({
-            "sid": sid,
-            "serverTime": now_s(),
-            "lastOnlineTime": now_s(),
-        })
 
     if low.startswith("/pow/"):
         if low == "/pow/bank/user/account":
@@ -4708,11 +4747,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         return 200, {}, json_bytes({})
 
     # ---- FUT authentication -----------------------------------------------
-    if low == "/ut/auth":
-        if method == "DELETE":
-            return 200, {}, json_bytes({})
-        sid = _ut_sid()
-        return 200, {"X-UT-SID": sid}, json_bytes({"sid": sid, "protocol": "http"})
 
     if low in ("/ut/shards", "/ut/shards/v2"):
         return 200, {}, json_bytes({
@@ -4832,12 +4866,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         }, xml
 
     # Exact FIFA 15 game namespace.
-    if low == "/ut/game/fifa15/settings":
-        return 200, {}, json_bytes({"configs": [
-            {"type": "IsStoreEnabled", "value": "1"},
-            {"type": "cardPackStoreEnabled", "value": "1"},
-            {"type": "pointsPackStoreEnabled", "value": "1"},
-        ]})
 
     if low.startswith("/ut/game/fifa15/phishing/trusteddevice"):
         return 200, {}, json_bytes({
@@ -4846,11 +4874,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             "completed": True, "answerRequired": False, "attempts": 0,
         })
 
-    if low == "/ut/game/fifa15/match/reset":
-        # Retail calls this during ordinary FUT bootstrap too. Keep it a pure
-        # acknowledgement; do not alter the active offline-season save.
-        log.info("MATCH FLOW reset method=%s body=%s", method, payload if isinstance(payload, dict) else {})
-        return 200, {}, json_bytes({"reset": True})
 
     # ---- FIFA 15 PC native match lifecycle -------------------------------
     # The working FIFA 14 PC Seasons build uses the same three route family:
@@ -5874,12 +5897,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         log.warning("TRANSFER LIST REMOVE trade=%s method=%s success=%s count=%s", trade_id, method, ok, STATE.transfer_list_count())
         return 200, {"Cache-Control": "no-store"}, b""
 
-    if low == "/ut/game/fifa15/tradepile":
-        response = _transfer_pile_payload()
-        log.warning("TRANSFER LIST response count=%s selling=%s sold=%s ids=%s",
-                    response.get("count"), response.get("selling"), response.get("sold"),
-                    [int(x.get("itemData", {}).get("id", 0) or 0) for x in response.get("auctionInfo", [])])
-        return 200, {"Cache-Control": "no-store"}, json_bytes(response)
 
     # ---- FIFA 15 PC trophy definition/image chain -------------------------
     # v0.2.6 reached these requests immediately after season/list + season/user.
