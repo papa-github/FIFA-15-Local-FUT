@@ -7263,7 +7263,7 @@ class LSXHandler(socketserver.BaseRequestHandler):
         log.info("Origin LSX client connected from %s:%s", *peer)
         buffer = bytearray()
 
-        if Cipher is None:
+        if _crypto_import_error is not None:
             log.error("Origin LSX requires the Python 'cryptography' package: %s", _crypto_import_error)
             return
 
