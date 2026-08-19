@@ -4575,6 +4575,72 @@ def _route_tutorials_cmn(req: FutRequest):
     return 404, {"Content-Type": "text/plain"}, b"not found"
 
 
+# Fixed-shape endpoints: constant or single-helper responses, no branching.
+@fut_route(r"/ut/game/fifa15/user")
+def _route_user(req: FutRequest):
+    return 200, {}, json_bytes(_native_user())
+
+
+@fut_route(r"/ut/game/fifa15/userdata")
+def _route_userdata(req: FutRequest):
+    return 200, {}, json_bytes({"onlineELORating": 0, "onlineRatedUser": False, "accountResetCount": 0})
+
+
+@fut_route(r"/ut/v2/game/fifa15/store/transaction")
+def _route_store_transaction(req: FutRequest):
+    return 200, {}, json_bytes({"state": "NOTRANSACTION"})
+
+
+@fut_route(r"/ut/game/fifa15/clientdata/tutorialpopups")
+def _route_clientdata_tutorialpopups(req: FutRequest):
+    return 200, {}, json_bytes({"entries": []})
+
+
+@fut_route(r"/ut/game/fifa15/clientdata/pilesize")
+def _route_clientdata_pilesize(req: FutRequest):
+    return 200, {}, json_bytes({"entries": [{"key": 2, "value": 100}, {"key": 4, "value": 100}]})
+
+
+@fut_route(r"/ut/game/fifa15/clientdata/userhubdata")
+def _route_clientdata_userhubdata(req: FutRequest):
+    return 200, {}, json_bytes({"entries": [{"key": 0, "value": 13}, {"key": 1, "value": 12}]})
+
+
+@fut_route(r"/ut/game/fifa15/clientdata/managerquest")
+def _route_clientdata_managerquest(req: FutRequest):
+    return 200, {}, json_bytes({"entries": [{"key": 0, "value": 148528}, {"key": 1, "value": 148528}, {"key": 2, "value": 0}]})
+
+
+@fut_route(r"/ut/game/fifa15/clientdata/loanplayerreward")
+def _route_clientdata_loanplayerreward(req: FutRequest):
+    return 200, {}, json_bytes({"entries": []})
+
+
+@fut_route(r"/ut/game/fifa15/loan/players")
+def _route_loan_players(req: FutRequest):
+    return 200, {}, json_bytes({"loans": []})
+
+
+@fut_route(r"/ut/game/fifa15/eventfeed")
+def _route_eventfeed(req: FutRequest):
+    return 200, {}, json_bytes({"event": [], "timestamp": now_s()})
+
+
+@fut_route(r"/ut/game/fifa15/leaderboards/options")
+def _route_leaderboards_options(req: FutRequest):
+    return 200, {}, json_bytes({})
+
+
+@fut_route(r"/ut/game/fifa15/club/stats/consumables")
+def _route_club_stats_consumables(req: FutRequest):
+    return 200, {"Cache-Control": "no-store"}, json_bytes(_consumable_stats())
+
+
+@fut_route(r"/ut/game/fifa15/user/credits")
+def _route_user_credits(req: FutRequest):
+    return 200, {}, json_bytes(_credits_payload())
+
+
 def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) -> tuple[int, dict[str, str], bytes]:
     # ProtoHttp sends the POW auth path with a double leading slash in the
     # successful FIFA 15 trace. urlsplit("//pow/auth") would otherwise treat
@@ -5052,28 +5118,10 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         )
         return 200, {"Cache-Control": "no-store"}, json_bytes(response)
 
-    if low == "/ut/game/fifa15/user":
-        return 200, {}, json_bytes(_native_user())
 
-    if low == "/ut/game/fifa15/userdata":
-        return 200, {}, json_bytes({"onlineELORating": 0, "onlineRatedUser": False, "accountResetCount": 0})
 
-    if low == "/ut/v2/game/fifa15/store/transaction":
-        return 200, {}, json_bytes({"state": "NOTRANSACTION"})
 
-    if low == "/ut/game/fifa15/clientdata/tutorialpopups":
-        return 200, {}, json_bytes({"entries": []})
-    if low == "/ut/game/fifa15/clientdata/pilesize":
-        return 200, {}, json_bytes({"entries": [{"key": 2, "value": 100}, {"key": 4, "value": 100}]})
-    if low == "/ut/game/fifa15/clientdata/userhubdata":
-        return 200, {}, json_bytes({"entries": [{"key": 0, "value": 13}, {"key": 1, "value": 12}]})
-    if low == "/ut/game/fifa15/clientdata/managerquest":
-        return 200, {}, json_bytes({"entries": [{"key": 0, "value": 148528}, {"key": 1, "value": 148528}, {"key": 2, "value": 0}]})
-    if low == "/ut/game/fifa15/clientdata/loanplayerreward":
-        return 200, {}, json_bytes({"entries": []})
 
-    if low == "/ut/game/fifa15/loan/players":
-        return 200, {}, json_bytes({"loans": []})
 
     if low == "/ut/game/fifa15/squad/active" and method == "GET":
         return 200, {"Cache-Control": "no-store"}, json_bytes(_native_squad())
@@ -5115,8 +5163,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             log.warning("SQUAD HTTP SAVE sid=%s keys=%s playersInRequest=%s", sid, sorted(src.keys()), len(src.get("players", [])) if isinstance(src.get("players"), list) else None)
             return 200, {"Cache-Control": "no-store"}, json_bytes(_native_squad(int(saved.get("id", sid) or sid)))
 
-    if low == "/ut/game/fifa15/eventfeed":
-        return 200, {}, json_bytes({"event": [], "timestamp": now_s()})
 
     if low == "/ut/game/fifa15/hub":
         user_auctions = STATE.list_user_auctions()
@@ -5169,8 +5215,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             "start": 0,
         })
 
-    if low == "/ut/game/fifa15/leaderboards/options":
-        return 200, {}, json_bytes({})
 
     if low.startswith("/ut/game/fifa15/club/consumables"):
         stored = [x for x in STATE.list_items("club") if str(x.get("itemType", "player")) != "player"]
@@ -5230,8 +5274,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             "total": len(rows), "count": len(rows), "start": 0,
         })
 
-    if low == "/ut/game/fifa15/club/stats/consumables":
-        return 200, {"Cache-Control": "no-store"}, json_bytes(_consumable_stats())
 
     if low.startswith("/ut/game/fifa15/club/stats/"):
         return 200, {}, json_bytes(_club_stats())
@@ -5366,8 +5408,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
             if equipped:
                 return 200, {"Cache-Control":"no-store"}, json_bytes({"itemData":[equipped], "actives":_active_club_items()})
 
-    if low == "/ut/game/fifa15/user/credits":
-        return 200, {}, json_bytes(_credits_payload())
 
     if low in ("/ut/game/fifa15/store/purchasegroup/all", "/ut/game/fifa15/store/purchasegroup/cardpack"):
         store_payload = _store_purchasegroups()
