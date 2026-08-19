@@ -62,6 +62,56 @@ if _program_data:
 else:
     SHARED_PORTS_PATH = None
 
+
+def _resolve_game_root() -> tuple[Path, str]:
+    """Locate the FIFA 15 installation.
+
+    The Local FUT payload no longer has to be copied inside the FIFA folder, so
+    the game directory is resolved explicitly instead of being inferred from
+    where this file happens to sit.  Order:
+
+      1. LOCALFUT_GAME_DIR environment variable (per-run override).
+      2. game_dir in install.json, in the FIFA15LocalFUT folder under
+         %LOCALAPPDATA%, as written by DEPLOY_TO_GAME.cmd.
+      3. ROOT.parent - the historical layout, where the whole payload was copied
+         into the game folder.  Keeping this last means an old-style install
+         still works untouched.
+
+    A candidate is only accepted if fifa15.exe is actually in it, so a stale
+    install.json cannot silently divert cl.ini/EA-MITM.ini to a dead path.
+    """
+    candidates: list[tuple[Path, str]] = []
+
+    env_dir = os.environ.get("LOCALFUT_GAME_DIR")
+    if env_dir:
+        candidates.append((Path(env_dir), "LOCALFUT_GAME_DIR"))
+
+    install_path = RUNTIME_ROOT / "install.json"
+    try:
+        # utf-8-sig: DEPLOY_TO_GAME.cmd writes this through PowerShell,
+        # whose Set-Content -Encoding utf8 emits a BOM that plain utf-8
+        # decoding leaves in front of the "{" and json.loads rejects.
+        raw = json.loads(install_path.read_text(encoding="utf-8-sig"))
+        configured = str(raw.get("game_dir", "") or "").strip()
+        if configured:
+            candidates.append((Path(configured), str(install_path)))
+    except FileNotFoundError:
+        pass
+    except Exception:
+        pass
+
+    for candidate, source in candidates:
+        try:
+            if (candidate / "fifa15.exe").is_file():
+                return candidate.resolve(), source
+        except OSError:
+            continue
+
+    return ROOT.parent, "payload location (legacy layout)"
+
+
+GAME_ROOT, GAME_ROOT_SOURCE = _resolve_game_root()
+
 DATA.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
 
@@ -7787,7 +7837,9 @@ def _clear_shared_ports() -> None:
 
 def _write_runtime_routing(host: str, *, lsx_mode: str = "local") -> None:
     """Write the chosen ports before FIFA starts so the local hook follows fallbacks."""
-    game_root = ROOT.parent
+    game_root = GAME_ROOT
+    log.info("Writing localhost routing into %s (game folder from %s)",
+             game_root, GAME_ROOT_SOURCE)
     legacy = int(CFG["legacy_fut_port"])
     fut = int(CFG["fut_port"])
     blaze = int(CFG["blaze_port"])

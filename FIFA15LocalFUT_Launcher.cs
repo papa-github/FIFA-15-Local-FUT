@@ -48,7 +48,12 @@ static class Launcher
         "Origin", "OriginWebHelperService", "OriginClientService", "OriginER",
     };
 
+    // gameDir holds fifa15.exe and the hook DLLs; payloadDir holds
+    // localfut15\server.py and the helper scripts. They are the same folder in
+    // the historical layout, and separate once DEPLOY_TO_GAME.cmd has recorded
+    // a working copy in install.json.
     static string gameDir;
+    static string payloadDir;
     static string logPath;
     static string launcherLogPath;
     static Process serverProc;
@@ -56,7 +61,11 @@ static class Launcher
     [STAThread]
     static int Main()
     {
-        gameDir = Path.GetDirectoryName(Application.ExecutablePath);
+        string ownDir = Path.GetDirectoryName(Application.ExecutablePath);
+        gameDir = ResolveDir("game_dir", "fifa15.exe", "LOCALFUT_GAME_DIR", ownDir);
+        payloadDir = ResolveDir("payload_dir",
+                                Path.Combine("localfut15", "server.py"),
+                                "LOCALFUT_PAYLOAD_DIR", ownDir);
 
         string runtimeRoot = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -67,14 +76,17 @@ static class Launcher
         launcherLogPath = Path.Combine(logDir, "steam-launcher.log");
 
         string gameExe = Path.Combine(gameDir, "fifa15.exe");
-        string serverPy = Path.Combine(gameDir, "localfut15", "server.py");
+        string serverPy = Path.Combine(payloadDir, "localfut15", "server.py");
 
         if (!File.Exists(gameExe) || !File.Exists(serverPy))
         {
-            Fail("This launcher must sit in the FIFA 15 folder next to fifa15.exe, " +
-                 "with the Local FUT payload already installed.\n\n" +
-                 "Run PLAY_LOCAL_FUT15.cmd from the release package once first.\n\n" +
-                 "Looked in:\n" + gameDir);
+            Fail("Could not locate both halves of the install.\n\n" +
+                 "Run DEPLOY_TO_GAME.cmd from your working copy once, which " +
+                 "installs the hook files and records both folders.\n\n" +
+                 "fifa15.exe expected in:\n" + gameDir + "\n" +
+                 (File.Exists(gameExe) ? "  (found)" : "  (MISSING)") + "\n\n" +
+                 "localfut15\\server.py expected in:\n" + payloadDir + "\n" +
+                 (File.Exists(serverPy) ? "  (found)" : "  (MISSING)"));
             return 1;
         }
 
@@ -140,14 +152,14 @@ static class Launcher
     // resolution in one place instead of duplicating it here.
     static bool StartServer()
     {
-        string script = Path.Combine(gameDir, "START_LOCAL_FUT15.cmd");
+        string script = Path.Combine(payloadDir, "START_LOCAL_FUT15.cmd");
         if (!File.Exists(script)) return false;
 
         try
         {
             ProcessStartInfo psi = new ProcessStartInfo("cmd.exe");
             psi.Arguments = "/c \"\"" + script + "\" > \"" + logPath + "\" 2>&1\"";
-            psi.WorkingDirectory = gameDir;
+            psi.WorkingDirectory = payloadDir;
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true;
             psi.RedirectStandardInput = true;   // so the script's trailing pause returns
@@ -161,7 +173,7 @@ static class Launcher
 
     static void StopServer()
     {
-        RunHidden(Path.Combine(gameDir, "STOP_LOCAL_FUT15.cmd"), "/quiet", 15000);
+        RunHidden(Path.Combine(payloadDir, "STOP_LOCAL_FUT15.cmd"), "/quiet", 15000);
         try
         {
             if (serverProc != null && !serverProc.HasExited)
@@ -230,6 +242,53 @@ static class Launcher
         }
     }
 
+    // Resolves one of the two folders, in the same order server.py uses:
+    //   1. the named environment variable (per-run override)
+    //   2. the field in %LOCALAPPDATA%\FIFA15LocalFUT\install.json
+    //   3. fallback - normally this exe's own folder, which is the historical
+    //      layout where the whole payload was copied into the game folder
+    // A candidate is accepted only if marker is actually inside it, so a stale
+    // install.json cannot send the launcher somewhere dead.
+    static string ResolveDir(string field, string marker, string envVar, string fallback)
+    {
+        string[] candidates = new string[]
+        {
+            Environment.GetEnvironmentVariable(envVar),
+            ReadInstallJsonField(field)
+        };
+
+        foreach (string candidate in candidates)
+        {
+            if (string.IsNullOrEmpty(candidate)) continue;
+            try
+            {
+                if (File.Exists(Path.Combine(candidate, marker))) return candidate;
+            }
+            catch { }
+        }
+        return fallback;
+    }
+
+    // Pulls one string field out of install.json with a regex rather than a JSON
+    // library, so the launcher keeps building against the in-box csc.exe with no
+    // assembly references beyond System and System.Windows.Forms.
+    static string ReadInstallJsonField(string field)
+    {
+        try
+        {
+            string path = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "FIFA15LocalFUT", "install.json");
+            if (!File.Exists(path)) return null;
+
+            Match m = Regex.Match(File.ReadAllText(path),
+                                  "\"" + field + "\"\\s*:\\s*\"(?<v>(?:[^\"\\\\]|\\\\.)*)\"");
+            if (!m.Success) return null;
+            return Regex.Unescape(m.Groups["v"].Value);
+        }
+        catch { return null; }
+    }
+
     static void RunHidden(string script, string args, int timeoutMs)
     {
         if (!File.Exists(script)) return;
@@ -237,7 +296,8 @@ static class Launcher
         {
             ProcessStartInfo psi = new ProcessStartInfo("cmd.exe");
             psi.Arguments = "/c \"\"" + script + "\" " + args + "\"";
-            psi.WorkingDirectory = gameDir;
+            // RunHidden only ever runs payload helper scripts.
+            psi.WorkingDirectory = payloadDir;
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true;
             psi.RedirectStandardInput = true;
