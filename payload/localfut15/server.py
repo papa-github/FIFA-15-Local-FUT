@@ -52,6 +52,15 @@ LOGS = RUNTIME_ROOT / "logs"
 LEGACY_DB_PATH = DATA / "localfut15.sqlite3"
 DB_PATH = RUNTIME_ROOT / "fut15-local.sqlite3"
 CONFIG_PATH = ROOT / "config.json"
+# A second copy of the port map lives in a machine-wide folder. PLAY_LOCAL_FUT15
+# always runs elevated, so when UAC elevates into a different administrator
+# account the launcher no longer shares LOCALAPPDATA with this process and would
+# never find the per-profile copy.
+_program_data = os.environ.get("ProgramData")
+if _program_data:
+    SHARED_PORTS_PATH = Path(_program_data) / "FIFA15LocalFUT" / "runtime_ports.json"
+else:
+    SHARED_PORTS_PATH = None
 
 DATA.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
@@ -5486,32 +5495,26 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
         )
         rid = int(requested_def or 0)
         iid = _query_int(query, ("itemId", "itemid", "itemIdList", "itemidlist"), 0)
-        if iid:
-            item = STATE.get_item(iid)
-            if item:
-                rid = int(item.get("resourceId", item.get("assetId", rid)) or rid)
+        item = STATE.get_item(iid) if iid else None
+        if item:
+            # An item id is the strongest identity available.  Several FIFA
+            # definitions can share one base assetId, so never replace this
+            # exact owned version with another card owned by the user.
+            rid = int(item.get("resourceId", item.get("assetId", rid)) or rid)
+        elif rid:
+            # Pack-result cards use a response-only sortable resourceId alias.
+            # Resolve only aliases from the current unassigned carousel; do not
+            # guess by scanning every owned card with the same base assetId.
+            # That old guess made a base CR7/Neymar/Tevez card inherit the range
+            # of an owned TOTY/IF version.
+            rid = int(_current_pack_display_alias_map().get(rid, rid))
 
-        # Pack-result cards are displayed with a sortable alias whose high byte
-        # encodes carousel order (e.g. 0x01xxxxxx), while the owned special item
-        # retains the real special resource id (e.g. 0x04xxxxxx).  Resolve the
-        # owned definition for pricing, but mask the definition for the response.
-        if rid:
-            base_asset = int(rid) & 0x00FFFFFF
-            candidates = []
-            for owned in STATE.list_items():
-                if str(owned.get("itemType", "player")) != "player":
-                    continue
-                try:
-                    owned_asset = int(owned.get("assetId", 0) or 0) & 0x00FFFFFF
-                    owned_rid = int(owned.get("resourceId", 0) or 0)
-                    owned_id = int(owned.get("id", 0) or 0)
-                except Exception:
-                    continue
-                if owned_asset == base_asset and owned_rid in PLAYER_DB:
-                    candidates.append((owned_id, owned_rid))
-            if candidates:
-                candidates.sort(reverse=True)
-                rid = int(candidates[0][1])
+        # If a stale/unknown alias reaches this endpoint, fall back to the base
+        # player definition when it is known.  This is deterministic and keeps
+        # the price editor usable without confusing one special version for
+        # another.
+        if rid not in PLAYER_DB and (int(rid) & 0x00FFFFFF) in PLAYER_DB:
+            rid = int(rid) & 0x00FFFFFF
 
         guide = STATE.market_reference_price(rid) if rid in PLAYER_DB else 1000
 
@@ -7628,12 +7631,10 @@ class LSXHandler(socketserver.BaseRequestHandler):
             except Exception:
                 log.exception("Unable to send LSX Login event to %s:%s", *peer)
 
-            # 3) Subsequent LSX messages are ASCII hex of AES-128-ECB/PKCS7 XML.
-            # FIFA 15 can remain in an offline match for several minutes with
-            # no LSX request. A 120-second idle timeout was enough to terminate
-            # a healthy match and produce FIFA's "Origin Client being terminated"
-            # message. Keep the local LSX session alive for 15 minutes instead.
-            sock.settimeout(900)
+            # FIFA 15 can remain in an offline match for long periods without sending
+            # any LSX requests. After authentication, keep the connection open
+            # indefinitely and let the client close it normally.
+            sock.settimeout(None)
             while True:
                 frame = _recv_nul_frame(sock, buffer)
                 if frame is None:
@@ -7764,6 +7765,26 @@ def _prepare_lsx(host: str) -> tuple[Any | None, str]:
         return None, "unavailable"
 
 
+def _write_shared_ports(ports: dict[str, Any]) -> None:
+    """Best-effort machine-wide copy of the port map for an elevated launcher."""
+    if SHARED_PORTS_PATH is None:
+        return
+    try:
+        SHARED_PORTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        SHARED_PORTS_PATH.write_text(json.dumps(ports, indent=2), encoding="utf-8")
+    except Exception as exc:
+        log.debug("Could not write shared port map %s: %s", SHARED_PORTS_PATH, exc)
+
+
+def _clear_shared_ports() -> None:
+    if SHARED_PORTS_PATH is None:
+        return
+    try:
+        SHARED_PORTS_PATH.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def _write_runtime_routing(host: str, *, lsx_mode: str = "local") -> None:
     """Write the chosen ports before FIFA starts so the local hook follows fallbacks."""
     game_root = ROOT.parent
@@ -7843,6 +7864,7 @@ Redirect.5.Secure=0
         "legacy_fut_port": legacy,
     }
     (RUNTIME_ROOT / "runtime_ports.json").write_text(json.dumps(ports, indent=2), encoding="utf-8")
+    _write_shared_ports(ports)
     log.info("Runtime port map: %s", ports)
 
 
@@ -7857,6 +7879,7 @@ def main() -> int:
         runtime_ports.unlink(missing_ok=True)
     except Exception:
         pass
+    _clear_shared_ports()
 
     servers: list[Any] = []
     try:
@@ -7938,6 +7961,7 @@ def main() -> int:
             runtime_ports.unlink(missing_ok=True)
         except Exception:
             pass
+        _clear_shared_ports()
         for s in servers:
             try:
                 s.shutdown()
