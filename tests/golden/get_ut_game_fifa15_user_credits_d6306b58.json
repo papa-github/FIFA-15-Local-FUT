@@ -1,0 +1,28 @@
+{
+  "body": {
+    "coins": 0,
+    "credits": 0,
+    "currencies": [
+      {
+        "finalFunds": 0,
+        "funds": 0,
+        "name": "coins"
+      },
+      {
+        "finalFunds": 0,
+        "funds": 0,
+        "name": "points"
+      }
+    ],
+    "finalFunds": 0,
+    "funds": 0,
+    "totalCredits": 0,
+    "unopenedPacks": {
+      "preOrderPacks": 0,
+      "recoveredPacks": 0
+    }
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

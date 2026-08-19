@@ -1,0 +1,1551 @@
+{
+  "body": {
+    "seasons": [
+      {
+        "divisionId": 1,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 1,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 750,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 775,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 800,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 825,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 850,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 875,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 900,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 925,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 950,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 975,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 2000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 18
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 9600
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 23
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 10000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 26
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 2,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 2,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 700,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 725,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 750,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 775,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 800,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 825,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 850,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 875,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 900,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 925,
+            "difficulty": 5,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1500
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 16
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 7100
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 21
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 7500
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 24
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 3,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 3,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 650,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 675,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 700,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 725,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 750,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 775,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 800,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 825,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 850,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 875,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1200
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 14
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 5600
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 19
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 6000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 22
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 4,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 4,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 600,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 625,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 650,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 675,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 700,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 725,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 750,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 775,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 800,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 825,
+            "difficulty": 4,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 13
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 4600
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 18
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 5000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 21
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 5,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 5,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 550,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 575,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 600,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 625,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 650,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 675,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 700,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 725,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 750,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 775,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 880
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 11
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 4000
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 16
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 4400
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 19
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 6,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 6,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 500,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 525,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 550,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 575,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 600,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 625,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 650,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 675,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 700,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 725,
+            "difficulty": 3,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 760
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 11
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 3400
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 16
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 3800
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 19
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 7,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 7,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 450,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 475,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 500,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 525,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 550,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 575,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 600,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 625,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 650,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 675,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 660
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 9
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 2900
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 14
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 3300
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 17
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 8,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 8,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 400,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 425,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 450,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 475,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 500,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 525,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 550,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 575,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 600,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 625,
+            "difficulty": 2,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 580
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 8
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 2500
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 13
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 2900
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 16
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 9,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 9,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 350,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 375,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 400,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 425,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 450,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 475,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 500,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 525,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 550,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 575,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 420
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 6
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1700
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 11
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 2100
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 14
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      },
+      {
+        "divisionId": 10,
+        "elgOperation": "AND",
+        "elgReq": [],
+        "endDateTime": "<EPOCH_S>",
+        "id": 10,
+        "matchLengthMin": 6,
+        "matches": [
+          {
+            "coins": 300,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 0,
+            "teamId": 1
+          },
+          {
+            "coins": 325,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 1,
+            "teamId": 5
+          },
+          {
+            "coins": 350,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 2,
+            "teamId": 7
+          },
+          {
+            "coins": 375,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 3,
+            "teamId": 9
+          },
+          {
+            "coins": 400,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 4,
+            "teamId": 10
+          },
+          {
+            "coins": 425,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 5,
+            "teamId": 11
+          },
+          {
+            "coins": 450,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 6,
+            "teamId": 21
+          },
+          {
+            "coins": 475,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 7,
+            "teamId": 22
+          },
+          {
+            "coins": 500,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 8,
+            "teamId": 73
+          },
+          {
+            "coins": 525,
+            "difficulty": 1,
+            "rewardMult": 1,
+            "roundId": 9,
+            "teamId": 243
+          }
+        ],
+        "numMatches": 10,
+        "prizeSet": [
+          {
+            "awardMappings": [
+              {
+                "awards": []
+              }
+            ],
+            "prizeLevel": "RELEGATION",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 300
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "MAINTENANCE",
+            "thresholdPoint": 0
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1500
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "PROMOTION",
+            "thresholdPoint": 9
+          },
+          {
+            "awardMappings": [
+              {
+                "awards": [
+                  {
+                    "assetId": 0,
+                    "count": 1,
+                    "halId": 0,
+                    "teamId": 0,
+                    "type": "coin",
+                    "value": 1900
+                  }
+                ]
+              }
+            ],
+            "prizeLevel": "CHAMPIONSHIP",
+            "thresholdPoint": 12
+          }
+        ],
+        "startDateTime": 0,
+        "trophyResourceId": 1100,
+        "trophyUseCount": 0,
+        "type": "OFFLINE",
+        "untilEndSeconds": 315360000,
+        "untilStartSeconds": 0,
+        "visEndDays": 3650,
+        "visStartDays": 3650
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

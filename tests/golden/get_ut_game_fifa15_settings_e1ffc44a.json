@@ -1,0 +1,21 @@
+{
+  "body": {
+    "configs": [
+      {
+        "type": "IsStoreEnabled",
+        "value": "1"
+      },
+      {
+        "type": "cardPackStoreEnabled",
+        "value": "1"
+      },
+      {
+        "type": "pointsPackStoreEnabled",
+        "value": "1"
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

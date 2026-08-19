@@ -1,0 +1,23 @@
+{
+  "body": {
+    "active": false,
+    "creationTime": "<EPOCH_S>",
+    "divisionId": 1,
+    "draws": 0,
+    "losses": 0,
+    "offlineDivision": 10,
+    "points": 0,
+    "round": 1,
+    "seasonCompleted": false,
+    "seasonEndResult": 0,
+    "seasonId": 10,
+    "seasonState": "inactive",
+    "type": "offline",
+    "wins": 0
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

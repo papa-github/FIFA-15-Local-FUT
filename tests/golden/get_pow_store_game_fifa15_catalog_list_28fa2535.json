@@ -1,0 +1,17 @@
+{
+  "body": {
+    "catalogs": [
+      {
+        "catalogId": 0,
+        "name": "FUT Store"
+      },
+      {
+        "catalogId": 1,
+        "name": "FIFAPoints"
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

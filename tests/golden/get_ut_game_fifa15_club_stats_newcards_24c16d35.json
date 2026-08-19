@@ -1,0 +1,317 @@
+{
+  "body": {
+    "badges": 1,
+    "badgesAvailable": 1,
+    "balls": 1,
+    "ballsEarned": 1,
+    "bronzePlayersEmployed": 0,
+    "consumables": 0,
+    "consumablesContract": 0,
+    "consumablesContractManager": 0,
+    "consumablesContractPlayer": 0,
+    "consumablesFitness": 0,
+    "consumablesFitnessPlayer": 0,
+    "consumablesFitnessTeam": 0,
+    "consumablesFormationManager": 0,
+    "consumablesHealing": 0,
+    "consumablesPlaystyle": 0,
+    "consumablesPosition": 0,
+    "consumablesTraining": 0,
+    "consumablesTrainingGk": 0,
+    "consumablesTrainingGkPlayStyle": 0,
+    "consumablesTrainingManager": 0,
+    "consumablesTrainingManagerLeagueModifier": 0,
+    "consumablesTrainingPlayer": 0,
+    "consumablesTrainingPlayerPlayStyle": 0,
+    "goldPlayersEmployed": 14,
+    "kits": 2,
+    "kitsAvailable": 2,
+    "playersEmployed": 14,
+    "rarePlayersEmployed": 14,
+    "silverPlayersEmployed": 0,
+    "stadia": 1,
+    "stadiaOwned": 1,
+    "staffEmployed": 0,
+    "staffFitnessCoach": 0,
+    "staffGKCoach": 0,
+    "staffHeadCoach": 0,
+    "staffPhysio": 0,
+    "stat": [
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_PLAYERS_EMPLOYED",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_RARE_PLAYERS_EMPLOYED",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_GOLD_PLAYERS_EMPLOYED",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_SILVER_PLAYERS_EMPLOYED",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_BRONZE_PLAYERS_EMPLOYED",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_TROPHIES_WON",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_KITS_AVAILABLE",
+        "typeValue": 2
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_BADGES_AVAILABLE",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_STADIA_OWNED",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_BALLS_EARNED",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "FUT_MYCLUB_STAFF_EMPLOYED",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "players",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "playersEmployed",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "rarePlayers",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "rarePlayersEmployed",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "playersBronze",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "playersSilver",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "playersGold",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "staff",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "staffEmployed",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "kits",
+        "typeValue": 2
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "kitsAvailable",
+        "typeValue": 2
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "badges",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "badgesAvailable",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "stadia",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "stadiaOwned",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "balls",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "ballsEarned",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "trophies",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "trophiesWon",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "consumables",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "clubPlayers",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "playerCount",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "rareQuantity",
+        "typeValue": 14
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "staffManager",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "kit",
+        "typeValue": 2
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "kitsHome",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "kitsAway",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "badge",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "timesWon",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "allofflinetrophy",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "allonlinetrophy",
+        "typeValue": 0
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "stadium",
+        "typeValue": 1
+      },
+      {
+        "contextId": 0,
+        "contextValue": 0,
+        "type": "ball",
+        "typeValue": 1
+      }
+    ],
+    "trophies": 0,
+    "trophiesFeaturedOffline": 0,
+    "trophiesFeaturedOnline": 0,
+    "trophiesOffline": 0,
+    "trophiesOnline": 0,
+    "trophiesSeasonOffline": 0,
+    "trophiesSeasonOnline": 0,
+    "trophiesWon": 0
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

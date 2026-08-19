@@ -1,0 +1,21 @@
+{
+  "body": {
+    "entries": [
+      {
+        "key": 0,
+        "value": 148528
+      },
+      {
+        "key": 1,
+        "value": 148528
+      },
+      {
+        "key": 2,
+        "value": 0
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

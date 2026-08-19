@@ -1,0 +1,17 @@
+{
+  "body": {
+    "credits": 0,
+    "currencies": [
+      {
+        "finalFunds": 0,
+        "funds": 0,
+        "name": "coins"
+      }
+    ],
+    "items": [],
+    "totalCredits": 0
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

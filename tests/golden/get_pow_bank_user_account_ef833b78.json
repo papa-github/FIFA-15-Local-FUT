@@ -1,0 +1,23 @@
+{
+  "body": {
+    "currencies": [
+      {
+        "currency": "pow_funds",
+        "funds": 0,
+        "fundsCapInfo": [
+          {
+            "fundsEarned": 0,
+            "period": "daily"
+          },
+          {
+            "fundsEarned": 0,
+            "period": "weekly"
+          }
+        ]
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

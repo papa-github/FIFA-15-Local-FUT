@@ -1,0 +1,23 @@
+{
+  "body": {
+    "seasonCoins": 0,
+    "seasonCompleted": 0,
+    "seasonConcededGoals": 0,
+    "seasonGamesDraw": 0,
+    "seasonGamesLost": 0,
+    "seasonGamesWon": 0,
+    "seasonOnlineDraws": 0,
+    "seasonOnlineLosses": 0,
+    "seasonOnlineWins": 0,
+    "seasonPromotions": 0,
+    "seasonRelegations": 0,
+    "seasonTitlesWon": 0,
+    "seasonWins": 0,
+    "seasonsScoredGoals": 0
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

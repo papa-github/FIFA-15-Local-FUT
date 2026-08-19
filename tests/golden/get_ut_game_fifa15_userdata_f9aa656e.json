@@ -1,0 +1,10 @@
+{
+  "body": {
+    "accountResetCount": 0,
+    "onlineELORating": 0,
+    "onlineRatedUser": false
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}

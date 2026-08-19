@@ -1,0 +1,1015 @@
+{
+  "body": {
+    "count": 14,
+    "itemData": [
+      {
+        "assetId": 203265,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 72
+          },
+          {
+            "index": 1,
+            "value": 38
+          },
+          {
+            "index": 2,
+            "value": 61
+          },
+          {
+            "index": 3,
+            "value": 51
+          },
+          {
+            "index": 4,
+            "value": 62
+          },
+          {
+            "index": 5,
+            "value": 70
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 203265,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000003,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000003,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CB",
+        "rareflag": 0,
+        "rating": 64,
+        "resourceGameYear": 2015,
+        "resourceId": 203265,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 11,
+        "teamid": 11,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 192319,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 71
+          },
+          {
+            "index": 1,
+            "value": 50
+          },
+          {
+            "index": 2,
+            "value": 62
+          },
+          {
+            "index": 3,
+            "value": 62
+          },
+          {
+            "index": 4,
+            "value": 60
+          },
+          {
+            "index": 5,
+            "value": 66
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 192319,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000005,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000005,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "LB",
+        "rareflag": 0,
+        "rating": 64,
+        "resourceGameYear": 2015,
+        "resourceId": 192319,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 202811,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 66
+          },
+          {
+            "index": 1,
+            "value": 60
+          },
+          {
+            "index": 2,
+            "value": 72
+          },
+          {
+            "index": 3,
+            "value": 67
+          },
+          {
+            "index": 4,
+            "value": 58
+          },
+          {
+            "index": 5,
+            "value": 60
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 202811,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000001,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000001,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 52,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "GK",
+        "rareflag": 1,
+        "rating": 63,
+        "resourceGameYear": 2015,
+        "resourceId": 202811,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 1,
+        "teamid": 1,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 200780,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 74
+          },
+          {
+            "index": 1,
+            "value": 52
+          },
+          {
+            "index": 2,
+            "value": 66
+          },
+          {
+            "index": 3,
+            "value": 67
+          },
+          {
+            "index": 4,
+            "value": 56
+          },
+          {
+            "index": 5,
+            "value": 63
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 200780,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000007,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000007,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CM",
+        "rareflag": 1,
+        "rating": 63,
+        "resourceGameYear": 2015,
+        "resourceId": 200780,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 213642,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 78
+          },
+          {
+            "index": 1,
+            "value": 62
+          },
+          {
+            "index": 2,
+            "value": 52
+          },
+          {
+            "index": 3,
+            "value": 61
+          },
+          {
+            "index": 4,
+            "value": 26
+          },
+          {
+            "index": 5,
+            "value": 59
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 213642,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000010,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000010,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "ST",
+        "rareflag": 1,
+        "rating": 63,
+        "resourceGameYear": 2015,
+        "resourceId": 213642,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 11,
+        "teamid": 11,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 213905,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 65
+          },
+          {
+            "index": 1,
+            "value": 62
+          },
+          {
+            "index": 2,
+            "value": 43
+          },
+          {
+            "index": 3,
+            "value": 59
+          },
+          {
+            "index": 4,
+            "value": 31
+          },
+          {
+            "index": 5,
+            "value": 68
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 213905,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000011,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000011,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "ST",
+        "rareflag": 1,
+        "rating": 63,
+        "resourceGameYear": 2015,
+        "resourceId": 213905,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 203331,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 79
+          },
+          {
+            "index": 1,
+            "value": 50
+          },
+          {
+            "index": 2,
+            "value": 57
+          },
+          {
+            "index": 3,
+            "value": 67
+          },
+          {
+            "index": 4,
+            "value": 28
+          },
+          {
+            "index": 5,
+            "value": 57
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 203331,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000006,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000006,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 50,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "RM",
+        "rareflag": 0,
+        "rating": 63,
+        "resourceGameYear": 2015,
+        "resourceId": 203331,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 216699,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 67
+          },
+          {
+            "index": 1,
+            "value": 49
+          },
+          {
+            "index": 2,
+            "value": 66
+          },
+          {
+            "index": 3,
+            "value": 68
+          },
+          {
+            "index": 4,
+            "value": 44
+          },
+          {
+            "index": 5,
+            "value": 44
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 216699,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000008,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000008,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 21,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CM",
+        "rareflag": 1,
+        "rating": 62,
+        "resourceGameYear": 2015,
+        "resourceId": 216699,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 1,
+        "teamid": 1,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 205990,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 69
+          },
+          {
+            "index": 1,
+            "value": 52
+          },
+          {
+            "index": 2,
+            "value": 65
+          },
+          {
+            "index": 3,
+            "value": 64
+          },
+          {
+            "index": 4,
+            "value": 51
+          },
+          {
+            "index": 5,
+            "value": 63
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 205990,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000013,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000013,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CM",
+        "rareflag": 1,
+        "rating": 62,
+        "resourceGameYear": 2015,
+        "resourceId": 205990,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 206075,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 68
+          },
+          {
+            "index": 1,
+            "value": 54
+          },
+          {
+            "index": 2,
+            "value": 52
+          },
+          {
+            "index": 3,
+            "value": 71
+          },
+          {
+            "index": 4,
+            "value": 35
+          },
+          {
+            "index": 5,
+            "value": 58
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 206075,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000012,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000012,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "GK",
+        "rareflag": 0,
+        "rating": 62,
+        "resourceGameYear": 2015,
+        "resourceId": 206075,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 11,
+        "teamid": 11,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 203747,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 84
+          },
+          {
+            "index": 1,
+            "value": 46
+          },
+          {
+            "index": 2,
+            "value": 56
+          },
+          {
+            "index": 3,
+            "value": 63
+          },
+          {
+            "index": 4,
+            "value": 59
+          },
+          {
+            "index": 5,
+            "value": 59
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 203747,
+        "discardValue": 700,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000002,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000002,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 45,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "RB",
+        "rareflag": 1,
+        "rating": 61,
+        "resourceGameYear": 2015,
+        "resourceId": 203747,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 1,
+        "teamid": 1,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 205360,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 75
+          },
+          {
+            "index": 1,
+            "value": 49
+          },
+          {
+            "index": 2,
+            "value": 59
+          },
+          {
+            "index": 3,
+            "value": 66
+          },
+          {
+            "index": 4,
+            "value": 45
+          },
+          {
+            "index": 5,
+            "value": 50
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 205360,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000009,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000009,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "LM",
+        "rareflag": 0,
+        "rating": 61,
+        "resourceGameYear": 2015,
+        "resourceId": 205360,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 200741,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 75
+          },
+          {
+            "index": 1,
+            "value": 31
+          },
+          {
+            "index": 2,
+            "value": 41
+          },
+          {
+            "index": 3,
+            "value": 50
+          },
+          {
+            "index": 4,
+            "value": 62
+          },
+          {
+            "index": 5,
+            "value": 63
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 200741,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000014,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000014,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CB",
+        "rareflag": 0,
+        "rating": 61,
+        "resourceGameYear": 2015,
+        "resourceId": 200741,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 0,
+        "teamid": 0,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      },
+      {
+        "assetId": 213661,
+        "assists": 0,
+        "attributeList": [
+          {
+            "index": 0,
+            "value": 54
+          },
+          {
+            "index": 1,
+            "value": 25
+          },
+          {
+            "index": 2,
+            "value": 45
+          },
+          {
+            "index": 3,
+            "value": 40
+          },
+          {
+            "index": 4,
+            "value": 57
+          },
+          {
+            "index": 5,
+            "value": 64
+          }
+        ],
+        "cardsubtypeid": 1,
+        "contract": 7,
+        "contracts": 7,
+        "definitionId": 213661,
+        "discardValue": 360,
+        "fitness": 99,
+        "formation": "f442",
+        "id": 900000000004,
+        "injuryGames": 0,
+        "injuryType": "none",
+        "itemId": 900000000004,
+        "itemState": "free",
+        "itemType": "player",
+        "lastSalePrice": 0,
+        "leagueId": 13,
+        "lifetimeAssists": 0,
+        "lifetimeStats": [],
+        "loans": 0,
+        "loyaltyBonus": 1,
+        "marketDataMaxPrice": 15000000,
+        "marketDataMinPrice": 150,
+        "morale": 50,
+        "nation": 0,
+        "owners": 1,
+        "playStyle": 0,
+        "posMods": [],
+        "preferredPosition": "CB",
+        "rareflag": 0,
+        "rating": 58,
+        "resourceGameYear": 2015,
+        "resourceId": 213661,
+        "statsList": [],
+        "suspension": 0,
+        "teamId": 5,
+        "teamid": 5,
+        "timestamp": "<EPOCH_S>",
+        "tradeable": true,
+        "training": 0,
+        "trainingId": 0,
+        "trainingResourceId": 0,
+        "untradeable": false
+      }
+    ],
+    "start": 0,
+    "total": 14,
+    "user": [
+      {
+        "persona": "LocalPlayer",
+        "personaId": "<EPOCH_S>",
+        "public": true
+      }
+    ]
+  },
+  "body_kind": "json",
+  "headers": {
+    "Cache-Control": "no-store"
+  },
+  "status": 200
+}

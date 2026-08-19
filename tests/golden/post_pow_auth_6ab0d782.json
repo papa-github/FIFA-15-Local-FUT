@@ -1,0 +1,12 @@
+{
+  "body": {
+    "lastOnlineTime": "<EPOCH_S>",
+    "serverTime": "<EPOCH_S>",
+    "sid": "<SESSION_ID>"
+  },
+  "body_kind": "json",
+  "headers": {
+    "X-POW-SID": "<SESSION_ID>"
+  },
+  "status": 200
+}

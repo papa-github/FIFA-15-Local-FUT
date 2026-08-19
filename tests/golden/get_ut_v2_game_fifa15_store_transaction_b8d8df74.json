@@ -1,0 +1,8 @@
+{
+  "body": {
+    "state": "NOTRANSACTION"
+  },
+  "body_kind": "json",
+  "headers": {},
+  "status": 200
+}
