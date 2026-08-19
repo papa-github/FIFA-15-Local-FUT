@@ -4772,6 +4772,564 @@ def _route_watchlist(req: FutRequest):
         return 200, {}, json_bytes({"success": True, "auctionInfo": [], "credits": STATE.credits()})
 
 
+@fut_route(r"/fut/packs/loc/storepackdescriptions\.en_us\.xml")
+def _route_packs_loc_storepackdescriptions_en_us_xml(req: FutRequest):
+    low = req.low
+    settings = load_pack_settings()
+    loc_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<xliff version="1.2">',
+        '  <file original="storepackdescriptions" source-language="en-US" datatype="plaintext">',
+        '    <body>',
+    ]
+
+    exported = []
+    for pid_s, cfg in sorted(
+        settings.get("packs", {}).items(),
+        key=lambda kv: int(kv[0])
+    ):
+        if not bool(cfg.get("enabled", True)):
+            continue
+
+        try:
+            pid = int(pid_s)
+        except Exception:
+            continue
+
+        name = str(cfg.get("name", f"FUT Pack {pid}") or f"FUT Pack {pid}")
+        bio = str(cfg.get("bio", "") or "")
+
+        name_xml = html.escape(name, quote=False)
+        bio_xml = html.escape(bio, quote=False)
+
+        # Desktop FUT store name.
+        key_name = f"FUT_STORE_PACK_{pid}_NAME"
+        loc_lines.append(
+            f'      <trans-unit id="{key_name}" resname="{key_name}">'
+            f'<source>{name_xml}</source></trans-unit>'
+        )
+
+        # Pack detail/description panel.
+        key_desc = f"FUT_STORE_PACK_{pid}_DESC"
+        loc_lines.append(
+            f'      <trans-unit id="{key_desc}" resname="{key_desc}">'
+            f'<source>{bio_xml}</source></trans-unit>'
+        )
+
+        # FIFA web/mobile-era localization files also expose a MOBILE name.
+        # Keeping it here is harmless for the PC client and improves
+        # compatibility with builds that request the same key family.
+        key_mobile = f"FUT_STORE_PACK_{pid}_NAME_MOBILE"
+        loc_lines.append(
+            f'      <trans-unit id="{key_mobile}" resname="{key_mobile}">'
+            f'<source>{name_xml}</source></trans-unit>'
+        )
+        exported.append((pid, name, bio))
+
+    loc_lines.extend([
+        '    </body>',
+        '  </file>',
+        '</xliff>',
+    ])
+    xml = ("\n".join(loc_lines)).encode("utf-8")
+
+    log.warning("STORE-SCOUT LOC RESPONSE xml=%s", xml.decode("utf-8", errors="replace"))
+    log.info("STORE PACK LOC XLIFF packs=%s", exported)
+
+    return 200, {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    }, xml
+
+@fut_route(r"/ut/game/fifa15/match")
+def _route_match(req: FutRequest):
+    method, low, payload = req.method, req.low, req.payload
+    doc = payload if isinstance(payload, dict) else {}
+    result_markers = {
+        "minutesPlayed", "minutes", "matchMinutes", "goals", "goalsScored",
+        "goalsFor", "homeGoals", "goalsAgainst", "goalsConceded", "awayGoals",
+        "result", "completed", "matchCompleted", "finished", "dnf", "didNotFinish",
+        "quit", "abandoned", "shotsOnTarget", "passAccuracy", "possession",
+        "successfulTackles",
+    }
+    is_create = method in ("POST", "PUT") and "squadId" in doc and not any(k in doc for k in result_markers)
+    is_ready = method == "PUT" and isinstance(doc.get("items"), list) and "squadId" not in doc and not any(k in doc for k in result_markers)
+    if is_create or is_ready:
+        STATE.set("offline_match_pending", True)
+        STATE.set("offline_match_started_at", now_s())
+        if is_create:
+            STATE.set("offline_match_starters", [])
+        elif is_ready:
+            starter_ids = []
+            for raw in doc.get("items", []):
+                if isinstance(raw, dict):
+                    try: starter_ids.append(int(raw.get("id", raw.get("itemId", 0)) or 0))
+                    except Exception: pass
+            STATE.set("offline_match_starters", [x for x in starter_ids if x > 0][:11])
+            log.warning("MATCH CONTRACTS starters=%s", STATE.get("offline_match_starters", []))
+        st = STATE.offline_season_state()
+        log.warning(
+            "SEASONS MATCH %s season=10 division=%s round=%s body=%s",
+            "CREATE" if is_create else "READY",
+            int(st.get("division", 10) or 10),
+            max(1, int(st.get("round", 0) or 0) + 1),
+            doc,
+        )
+        return 200, {"Cache-Control": "no-store"}, json_bytes({
+            "squad": _native_squad(),
+            "startDateTime": now_s(),
+        })
+    if method == "GET":
+        return 200, {"Cache-Control": "no-store"}, json_bytes({
+            "match": None,
+            "credits": STATE.credits(),
+        })
+    log.warning("MATCH FLOW generic method=%s body=%s", method, doc)
+    return 200, {"Cache-Control": "no-store"}, json_bytes({})
+
+@fut_route(r"/ut/game/fifa15/match/end")
+def _route_match_end(req: FutRequest):
+    low, payload = req.low, req.payload
+    doc = payload if isinstance(payload, dict) else {}
+    end_reason = str(doc.get("endReason") or doc.get("result") or "NO_CONTEST").strip().upper()
+    # Offline Seasons treats an in-match quit/DNF as a played loss. Returning
+    # QUIT here made FIFA save the pre-match opaque SeasonData again and then
+    # show Start Season on re-entry. Tell the client the terminal fixture
+    # result is LOSS while still awarding zero coins for the DNF.
+    response_reason = "LOSS" if end_reason in {"QUIT", "DNF", "FORFEIT"} else end_reason
+
+    # A retry after the first terminal settlement must return the exact same
+    # successful award document instead of creating a second result.
+    if not bool(STATE.get("offline_match_pending", False)):
+        cached = STATE.get("last_match_end_response", {})
+        if isinstance(cached, dict) and cached and end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
+            log.warning("SEASONS MATCH END retry returning cached settlement reason=%s", end_reason)
+            return 200, {"Cache-Control": "no-store"}, json_bytes(cached)
+
+    st_before = STATE.offline_season_state()
+    internal_defs = _offline_season_definitions()
+    current = next(
+        (x for x in internal_defs if int(x.get("divisionNumber", 10)) == int(st_before.get("division", 10))),
+        internal_defs[-1],
+    )
+    difficulty = int(current.get("difficulty", 1) or 1)
+
+    raw_items = doc.get("items") if isinstance(doc.get("items"), list) else []
+    stat_items: list[dict[str, Any]] = []
+    allowed = (
+        "shots", "goals", "yellowCards", "redCards", "suspension",
+        "injuryType", "injuryGames", "fitness", "assists",
+    )
+    for raw in raw_items:
+        if not isinstance(raw, dict):
+            continue
+        try:
+            iid = int(raw.get("id", raw.get("itemId", 0)) or 0)
+        except Exception:
+            iid = 0
+        if iid <= 0:
+            continue
+        row: dict[str, Any] = {"id": iid}
+        for key in allowed:
+            if key in raw:
+                row[key] = raw.get(key)
+        stat_items.append(row)
+
+    # Fitness/stat mutations arriving with DestroyMatch are part of the
+    # authoritative local club state too. Persist them before building the
+    # response so a relaunch cannot restore pre-match fitness/stat values.
+    for row in stat_items:
+        try:
+            STATE.update_item_fields(int(row.get("id", 0) or 0), row)
+        except Exception:
+            pass
+
+    reward = _offline_match_reward(doc, end_reason)
+    seconds_played = int(reward.get("secondsPlayed", 0) or 0)
+    if end_reason in {"QUIT", "DNF", "FORFEIT"} and seconds_played <= 0:
+        # A zero-second terminal response can be interpreted by the client as
+        # a no-contest bootstrap instead of a played DNF. Use the measured
+        # local match lifetime so a user-initiated forfeit is still a real
+        # loss/fixture settlement while receiving zero coins.
+        started_at = int(STATE.get("offline_match_started_at", now_s()) or now_s())
+        seconds_played = max(1, now_s() - started_at)
+    first_settlement = bool(STATE.get("offline_match_pending", False)) and end_reason in {
+        "WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"
+    }
+
+    settled = st_before
+    reward_coins = 0
+    if first_settlement:
+        result_key = "win" if end_reason == "WIN" else "draw" if end_reason == "DRAW" else "loss"
+        mine = doc.get("myMatchStats") if isinstance(doc.get("myMatchStats"), dict) else {}
+        opp = doc.get("opponentMatchStats") if isinstance(doc.get("opponentMatchStats"), dict) else {}
+        gf = max(0, int(mine.get("goals", 0) or 0))
+        ga = max(0, int(opp.get("goals", 0) or 0))
+        settled = STATE.update_offline_season({
+            "result": result_key,
+            "goalsFor": int(st_before.get("goalsFor", 0) or 0) + gf,
+            "goalsAgainst": int(st_before.get("goalsAgainst", 0) or 0) + ga,
+        })
+        record_key = "record_wins" if result_key == "win" else "record_draws" if result_key == "draw" else "record_losses"
+        STATE.set(record_key, int(STATE.get(record_key, 0) or 0) + 1)
+        STATE.set("offline_season_history_goals_for", int(STATE.get("offline_season_history_goals_for", 0) or 0) + gf)
+        STATE.set("offline_season_history_goals_against", int(STATE.get("offline_season_history_goals_against", 0) or 0) + ga)
+
+        # Completed matches receive the award exactly once. Quit/DNF remains
+        # zero so the local economy cannot be farmed through forfeits.
+        if end_reason in {"WIN", "DRAW", "LOSS"}:
+            reward_coins = int(reward.get("rewardCoins", 0) or 0)
+            if reward_coins > 0:
+                STATE.add_credits(reward_coins)
+                STATE.set("offline_season_coins", int(STATE.get("offline_season_coins", 0) or 0) + reward_coins)
+
+        # FUT contracts are consumed by players who actually took part in the
+        # fixture. Start with the 11 MatchReady starters, then include any bench
+        # item that appears to have entered play (fitness/stat mutation). This is
+        # performed only on the first terminal settlement, so retries cannot
+        # consume a second contract.
+        participant_ids = set(int(x) for x in (STATE.get("offline_match_starters", []) or []) if int(x or 0) > 0)
+        for row in stat_items:
+            iid = int(row.get("id", 0) or 0)
+            if iid <= 0 or iid in participant_ids:
+                continue
+            if int(row.get("fitness", 99) or 99) < 99 or any(int(row.get(k, 0) or 0) for k in ("goals","assists","shots","yellowCards","redCards")):
+                participant_ids.add(iid)
+        contract_updates = STATE.decrement_player_contracts(sorted(participant_ids))
+        STATE.set("offline_match_starters", [])
+        log.warning("MATCH CONTRACTS decremented=%s", [(int(x.get("id",0)), int(x.get("contract",0))) for x in contract_updates])
+
+        # Player/GK training cards are one-match effects. Expire only after
+        # the first terminal settlement so retries cannot consume/restore twice.
+        expired_training = STATE.expire_training_for_items([int(x.get("id", 0) or 0) for x in stat_items])
+
+        # FIFA writes its native SeasonData envelope immediately after
+        # /match/end. For quit/DNF we now return LOSS, which makes the client
+        # author a real next-round blob instead of echoing its pre-match save.
+        STATE.set("awaiting_post_match_season_save", True)
+
+        log.warning(
+            "SEASONS PROGRESSION settled result=%s reward=%s state=%s record=%s-%s-%s",
+            result_key, reward_coins, settled,
+            int(STATE.get("record_wins", 0) or 0),
+            int(STATE.get("record_draws", 0) or 0),
+            int(STATE.get("record_losses", 0) or 0),
+        )
+
+    current_credits = STATE.credits()
+    response: dict[str, Any] = {
+        "endReason": response_reason,
+        "secondsPlayed": seconds_played,
+        "matchDifficulty": difficulty,
+        "items": stat_items,
+        "matchData": str(doc.get("matchData") or ""),
+        "credits": current_credits,
+        "coins": current_credits,
+    }
+
+    if end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
+        completed_normally = end_reason in {"WIN", "DRAW", "LOSS"}
+        # FIFA 15 PC's RS4:FutDestroyMatchServerResponse does NOT consume
+        # our earlier completionAward/skillAward/rewardCoins names.  The
+        # retail decoder reads allCoins, matchCoins, participationAward,
+        # gameModeAward, boostConis (the retail typo), and the multiplier/
+        # partial arrays.  Keep the old aliases for diagnostics, but make
+        # the native fields authoritative so the post-match award screen
+        # can actually render the coins that were already credited locally.
+        native_total = int(reward_coins if first_settlement else reward.get("totalCoins", 0) or 0) if completed_normally else 0
+        native_participation = int(reward.get("completionAward", 0) or 0) if completed_normally else 0
+        native_match = max(0, native_total - native_participation) if completed_normally else 0
+        response.update({
+            "allCoins": native_total,
+            "matchCoins": native_match,
+            "participationAward": native_participation,
+            "gameModeAward": {"coins": 0},
+            "boostConis": 0,
+            "boostCountLeft": 0,
+            "matchCoinMultipliers": [],
+            "matchCoinPartials": [],
+            "seasonCoins": 0,
+            "tournamentCoins": 0,
+            "teamOfTournamentWinner": False,
+
+            # Legacy/local aliases retained so old traces and cached
+            # settlements stay easy to inspect.
+            "completionAward": native_participation,
+            "skillAward": native_match,
+            "rewardCoins": native_total,
+            "totalCoins": native_total,
+            "dnfModifier": float(reward.get("dnfModifier", 1.0) or 1.0),
+            "seasonId": 10,
+            "divisionId": int(settled.get("division", 10) or 10),
+            "seasonRound": max(1, int(settled.get("round", 0) or 0) + 1),
+            "seasonPoints": int(settled.get("points", 0) or 0),
+            "seasonGamesWon": int(settled.get("wins", 0) or 0),
+            "seasonGamesDraw": int(settled.get("draws", 0) or 0),
+            "seasonGamesLost": int(settled.get("losses", 0) or 0),
+        })
+    if first_settlement:
+        refreshed = []
+        for row in stat_items:
+            item = STATE.get_item(int(row.get("id", 0) or 0))
+            if item and str(item.get("itemType", "player")) == "player":
+                refreshed.append(_native_player_item(item))
+        if refreshed:
+            response["itemData"] = refreshed
+
+    if isinstance(doc.get("myMatchStats"), dict):
+        response["myMatchStats"] = doc["myMatchStats"]
+    if isinstance(doc.get("opponentMatchStats"), dict):
+        response["opponentMatchStats"] = doc["opponentMatchStats"]
+
+    if first_settlement:
+        STATE.set("offline_match_pending", False)
+        STATE.set("last_match_end_response", response)
+
+    if end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
+        log.warning(
+            "MATCH REWARD FIFA15-NATIVE allCoins=%s matchCoins=%s participationAward=%s wallet=%s",
+            int(response.get("allCoins", 0) or 0),
+            int(response.get("matchCoins", 0) or 0),
+            int(response.get("participationAward", 0) or 0),
+            current_credits,
+        )
+
+    log.warning(
+        "SEASONS MATCH END season=10 division=%s round=%s reason=%s body=%s response=%s",
+        int(st_before.get("division", 10) or 10),
+        max(1, int(st_before.get("round", 0) or 0) + 1),
+        end_reason,
+        doc,
+        response,
+    )
+    return 200, {"Cache-Control": "no-store"}, json_bytes(response)
+
+@fut_route(r"/ut/game/fifa15/club")
+def _route_club(req: FutRequest):
+    low, query = req.low, req.query
+    requested_type = str(query.get("type", [""])[0] or "").lower()
+    # Player searches must include cards currently fielded by the active
+    # squad. FIFA still shows them in My Club position filters.
+    if requested_type == "player":
+        items = [x for x in (STATE.list_items("club") + STATE.list_items("squad"))
+                 if str(x.get("itemType", "player")) == "player"]
+    else:
+        items = STATE.list_items("club")
+
+    if requested_type in ("consumable", "development", "training"):
+        items = [x for x in items if int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE]
+    elif requested_type == "manager":
+        items = [x for x in items if str(x.get("itemType", "")).lower() == "manager"]
+    elif requested_type in ("kit", "stadium", "ball", "custom", "badge", "trophy"):
+        wanted = "custom" if requested_type == "badge" else requested_type
+        items = [x for x in items if str(x.get("itemType", "")).lower() == wanted]
+    elif requested_type == "equippables":
+        items = [x for x in items if str(x.get("itemType", "")).lower() in {"kit", "stadium", "ball", "custom"}]
+    elif requested_type and requested_type not in ("any", "-1"):
+        items = [x for x in items if str(x.get("itemType", "")).lower() == requested_type]
+
+    def _qint(name: str, default: int = -1) -> int:
+        try:
+            return int(query.get(name, [default])[0])
+        except Exception:
+            return default
+
+    # Native My Club filters. v0.2.16 parsed none of these, so selecting CM,
+    # LB, nation, league, etc. merely paged the same complete player list.
+    if requested_type == "player":
+        position = str(query.get("position", query.get("pos", [""]))[0] or "").upper()
+        nation = _qint("nation", -1)
+        league = _qint("league", -1)
+        team = _qint("team", -1)
+        level = str(query.get("level", ["any"])[0] or "any").lower()
+        filtered: list[dict[str, Any]] = []
+        for item in items:
+            pos = str(item.get("preferredPosition", "") or "").upper()
+            rating = int(item.get("rating", 0) or 0)
+            rareflag = int(item.get("rareflag", 0) or 0)
+            special = rareflag > 1
+            if position not in ("", "ANY", "-1") and pos != position:
+                continue
+            if nation >= 0 and int(item.get("nation", -1) or -1) != nation:
+                continue
+            if league >= 0 and int(item.get("leagueId", -1) or -1) != league:
+                continue
+            if team >= 0 and int(item.get("teamid", item.get("teamId", -1)) or -1) != team:
+                continue
+            if level not in ("", "any", "-1"):
+                if level == "bronze" and not (rating <= 64 and not special): continue
+                if level == "silver" and not (65 <= rating <= 74 and not special): continue
+                if level == "gold" and not (rating >= 75 and not special): continue
+                if level in ("sp", "special") and not special: continue
+            filtered.append(item)
+        items = filtered
+
+    def _club_sort_key(item):
+        try: rating = int(item.get("rating", 0) or 0)
+        except Exception: rating = 0
+        try: rareflag = int(item.get("rareflag", 0) or 0)
+        except Exception: rareflag = 0
+        try: rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
+        except Exception: rid = 0
+        try: iid = int(item.get("id", 0) or 0)
+        except Exception: iid = 0
+        return (-rating, -rareflag, -rid, iid)
+
+    items = sorted(items, key=_club_sort_key)
+    try:
+        count = int(query.get("count", [len(items)])[0] or len(items))
+    except Exception:
+        count = len(items)
+    start = 0
+    for key in ("start", "offset", "startIndex", "startindex"):
+        if key in query:
+            try:
+                start = max(0, int(query.get(key, [0])[0] or 0))
+                break
+            except Exception:
+                pass
+    if start == 0 and "page" in query:
+        try:
+            page = max(1, int(query.get("page", [1])[0] or 1))
+            start = (page - 1) * max(1, count)
+        except Exception:
+            pass
+    page_items = items[start:start + max(0, count)]
+
+    all_club = STATE.list_items("club")
+    all_squad = STATE.list_items("squad")
+    all_players = [x for x in all_club + all_squad if str(x.get("itemType", "player")) == "player"]
+    all_consumables = [x for x in all_club if int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE]
+    all_cosmetics = [x for x in all_club if str(x.get("itemType", "")).lower() in {"kit","stadium","ball","custom"}]
+    log.info(
+        "CLUB PAGE start=%d count=%d total=%d returned=%d query=%s positions=%s",
+        start, count, len(items), len(page_items), query,
+        sorted({str(x.get('preferredPosition','')) for x in page_items if str(x.get('itemType','player')) == 'player'}),
+    )
+    return 200, {}, json_bytes({
+        "pileClubPlayers": len([x for x in all_players if str(x.get("pile", "club")) == "club"]),
+        "pileSquadPlayers": len([x for x in all_players if str(x.get("pile", "club")) == "squad"]),
+        "pileConsumables": len(all_consumables),
+        "pileManagers": len([x for x in all_club if str(x.get("itemType", "")).lower() == "manager"]),
+        "pileClubItems": len(all_cosmetics),
+        "pileClubTotal": len(all_club) + len(all_squad),
+        "pilePack": len(STATE.list_items("unassigned")),
+        "kitCount": len([x for x in all_cosmetics if x.get("itemType") == "kit"]),
+        "badgeCount": len([x for x in all_cosmetics if x.get("itemType") == "custom"]),
+        "stadiumCount": len([x for x in all_cosmetics if x.get("itemType") == "stadium"]),
+        "ballCount": len([x for x in all_cosmetics if x.get("itemType") == "ball"]),
+        "clubPlayers": len(all_players),
+        "clubItemCount": len(all_club) + len(all_squad),
+        "clubCount": len(all_club) + len(all_squad),
+        "total": len(items),
+        "count": len(page_items),
+        "start": start,
+        "itemData": page_items,
+    })
+
+@fut_route(r"/ut/game/fifa15/purchased/items")
+def _route_purchased_items(req: FutRequest):
+    method, low, payload = req.method, req.low, req.payload
+    if method == "POST":
+        pack_id = int(payload.get("packId", 3)) if isinstance(payload, dict) else 3
+        price = max(0, int(get_pack_cfg(pack_id).get("price", 0)))
+        if isinstance(payload, dict) and int(payload.get("useCredits", 1)):
+            if STATE.credits() < price:
+                return 200, {}, json_bytes({"duplicateItemIdList": [], "itemData": [], **_credits_payload()})
+            STATE.add_credits(-price)
+        log.warning("CARDS-SCOUT PACK_OPEN_BEGIN packId=%s ownedClub=%d ownedSquad=%d",
+                    pack_id, len(STATE.list_items("club")), len(STATE.list_items("squad")))
+        pack = STATE.create_pack(pack_id)
+        log.warning("CARDS-SCOUT PACK_OPEN_ITEMS ids=%s resources=%s duplicates=%s",
+                    [x.get("id") for x in pack.get("itemData", [])],
+                    [x.get("resourceId") for x in pack.get("itemData", [])],
+                    pack.get("duplicateItemIdList", []))
+        # FIFA's native pack-purchase response uses itemList as the ordered
+        # reveal list.  Do not also send itemData/items here: those extra
+        # aliases caused the PC client to rebuild the collection and fall
+        # back to its resourceId ordering instead of our reveal order.
+        ordered_pack_items = [_native_pack_item(x) for x in pack.get("itemData", [])]
+        real_resources = [x.get("resourceId") for x in ordered_pack_items]
+        ordered_pack_items = [_display_sort_alias(x, i) for i, x in enumerate(ordered_pack_items)]
+        log.warning("PACK DISPLAY ORDER ratings=%s rareflags=%s ids=%s timestamps=%s realResources=%s aliasResources=%s",
+                    [x.get("rating") for x in ordered_pack_items],
+                    [x.get("rareflag") for x in ordered_pack_items],
+                    [x.get("id") for x in ordered_pack_items],
+                    [x.get("timestamp") for x in ordered_pack_items],
+                    real_resources,
+                    [x.get("resourceId") for x in ordered_pack_items])
+        return 200, {}, json_bytes({
+            "numberItems": int(pack.get("numberItems", len(ordered_pack_items))),
+            "purchasedPackId": int(pack.get("purchasedPackId", pack_id)),
+            "duplicateItemIdList": pack["duplicateItemIdList"],
+            # Feed the same desired order through every FIFA 15 response alias.
+            "itemList": ordered_pack_items,
+            "itemData": ordered_pack_items,
+            "items": ordered_pack_items,
+            **_credits_payload(),
+        })
+    # When there are unassigned pack cards, preserve their duplicate markers on
+    # refreshes of purchased/items. With no unassigned cards this stays exactly
+    # the normal empty bootstrap shape used while entering FUT.
+    unassigned = STATE.list_items("unassigned")
+
+    # FIFA refreshes /purchased/items after the pack-open POST and uses this
+    # refreshed itemData order for the reveal/New Items screen. Keep this
+    # order identical to create_pack(): highest rating first.
+    def _unassigned_reveal_sort_key(item):
+        try:
+            rating = int(item.get("rating", 0) or 0)
+        except Exception:
+            rating = 0
+        try:
+            rareflag = int(item.get("rareflag", 0) or 0)
+        except Exception:
+            rareflag = 0
+        try:
+            rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
+        except Exception:
+            rid = 0
+        # Same ordering as create_pack(): specials first, then OVR descending.
+        is_special = bool(item.get("special", False)) or rareflag > 1
+        return (0 if is_special else 1, -rating, -rareflag, -rid)
+
+    unassigned = sorted(unassigned, key=_unassigned_reveal_sort_key)
+
+    duplicate_item_list = []
+    for item in unassigned:
+        try:
+            iid = int(item.get("id", 0) or 0)
+            rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
+        except Exception:
+            continue
+        owned_item = STATE.owned_player_item_by_resource_id(rid)
+        owned_iid = int(owned_item.get("id", 0) or 0) if isinstance(owned_item, dict) else 0
+        if iid and owned_iid:
+            duplicate_item_list.append({"itemId": iid, "duplicateItemId": owned_iid})
+    native_unassigned = [_native_pack_item(x) for x in unassigned]
+    real_resources = [x.get("resourceId") for x in native_unassigned]
+    # Pack reveals use a response-only resourceId alias to control carousel order.
+    # A market purchase must NEVER use that alias: the search/Assign Now screen
+    # resolves the card art from the real special resourceId. Aliasing IF Rooney
+    # (67162914), for example, turned him into an undefined NOT FOUND card.
+    is_market_purchase = any(int(x.get("lastSalePrice", 0) or 0) > 0 for x in unassigned)
+    if not is_market_purchase:
+        native_unassigned = [_display_sort_alias(x, i) for i, x in enumerate(native_unassigned)]
+    log.warning("UNASSIGNED DISPLAY ORDER source=%s ratings=%s rareflags=%s realResources=%s responseResources=%s",
+                "market" if is_market_purchase else "pack",
+                [x.get("rating") for x in native_unassigned],
+                [x.get("rareflag") for x in native_unassigned],
+                real_resources,
+                [x.get("resourceId") for x in native_unassigned])
+    return 200, {}, json_bytes({
+        "numberItems": len(native_unassigned),
+        "duplicateItemIdList": duplicate_item_list,
+        "itemData": native_unassigned,
+    })
+
+
 def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) -> tuple[int, dict[str, str], bytes]:
     # ProtoHttp sends the POW auth path with a double leading slash in the
     # successful FIFA 15 trace. urlsplit("//pow/auth") would otherwise treat
@@ -4859,78 +5417,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
 
     # Static client-side localization/config requests observed in FUT.
     # (leaderboards.eng_us.xml and tutorials/cmn are now table-driven above)
-    if low == "/fut/packs/loc/storepackdescriptions.en_us.xml":
-        # FUT store pack localization is an XLIFF translation file.
-        # The native client resolves the visible title/description through
-        # FUT_STORE_PACK_<packId>_NAME / _DESC keys rather than from the
-        # human-readable name fields in purchasegroup/all.
-        settings = load_pack_settings()
-        loc_lines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<xliff version="1.2">',
-            '  <file original="storepackdescriptions" source-language="en-US" datatype="plaintext">',
-            '    <body>',
-        ]
-
-        exported = []
-        for pid_s, cfg in sorted(
-            settings.get("packs", {}).items(),
-            key=lambda kv: int(kv[0])
-        ):
-            if not bool(cfg.get("enabled", True)):
-                continue
-
-            try:
-                pid = int(pid_s)
-            except Exception:
-                continue
-
-            name = str(cfg.get("name", f"FUT Pack {pid}") or f"FUT Pack {pid}")
-            bio = str(cfg.get("bio", "") or "")
-
-            name_xml = html.escape(name, quote=False)
-            bio_xml = html.escape(bio, quote=False)
-
-            # Desktop FUT store name.
-            key_name = f"FUT_STORE_PACK_{pid}_NAME"
-            loc_lines.append(
-                f'      <trans-unit id="{key_name}" resname="{key_name}">'
-                f'<source>{name_xml}</source></trans-unit>'
-            )
-
-            # Pack detail/description panel.
-            key_desc = f"FUT_STORE_PACK_{pid}_DESC"
-            loc_lines.append(
-                f'      <trans-unit id="{key_desc}" resname="{key_desc}">'
-                f'<source>{bio_xml}</source></trans-unit>'
-            )
-
-            # FIFA web/mobile-era localization files also expose a MOBILE name.
-            # Keeping it here is harmless for the PC client and improves
-            # compatibility with builds that request the same key family.
-            key_mobile = f"FUT_STORE_PACK_{pid}_NAME_MOBILE"
-            loc_lines.append(
-                f'      <trans-unit id="{key_mobile}" resname="{key_mobile}">'
-                f'<source>{name_xml}</source></trans-unit>'
-            )
-            exported.append((pid, name, bio))
-
-        loc_lines.extend([
-            '    </body>',
-            '  </file>',
-            '</xliff>',
-        ])
-        xml = ("\n".join(loc_lines)).encode("utf-8")
-
-        log.warning("STORE-SCOUT LOC RESPONSE xml=%s", xml.decode("utf-8", errors="replace"))
-        log.info("STORE PACK LOC XLIFF packs=%s", exported)
-
-        return 200, {
-            "Content-Type": "application/xml; charset=utf-8",
-            "Cache-Control": "no-store, no-cache, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0",
-        }, xml
 
     # Exact FIFA 15 game namespace.
 
@@ -4949,264 +5435,7 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
     #   POST/PUT /match/end   DestroyMatch
     # Keep this deliberately conservative. FIFA's own season/user save blob
     # remains authoritative for round/points progression.
-    if low == "/ut/game/fifa15/match":
-        doc = payload if isinstance(payload, dict) else {}
-        result_markers = {
-            "minutesPlayed", "minutes", "matchMinutes", "goals", "goalsScored",
-            "goalsFor", "homeGoals", "goalsAgainst", "goalsConceded", "awayGoals",
-            "result", "completed", "matchCompleted", "finished", "dnf", "didNotFinish",
-            "quit", "abandoned", "shotsOnTarget", "passAccuracy", "possession",
-            "successfulTackles",
-        }
-        is_create = method in ("POST", "PUT") and "squadId" in doc and not any(k in doc for k in result_markers)
-        is_ready = method == "PUT" and isinstance(doc.get("items"), list) and "squadId" not in doc and not any(k in doc for k in result_markers)
-        if is_create or is_ready:
-            STATE.set("offline_match_pending", True)
-            STATE.set("offline_match_started_at", now_s())
-            if is_create:
-                STATE.set("offline_match_starters", [])
-            elif is_ready:
-                starter_ids = []
-                for raw in doc.get("items", []):
-                    if isinstance(raw, dict):
-                        try: starter_ids.append(int(raw.get("id", raw.get("itemId", 0)) or 0))
-                        except Exception: pass
-                STATE.set("offline_match_starters", [x for x in starter_ids if x > 0][:11])
-                log.warning("MATCH CONTRACTS starters=%s", STATE.get("offline_match_starters", []))
-            st = STATE.offline_season_state()
-            log.warning(
-                "SEASONS MATCH %s season=10 division=%s round=%s body=%s",
-                "CREATE" if is_create else "READY",
-                int(st.get("division", 10) or 10),
-                max(1, int(st.get("round", 0) or 0) + 1),
-                doc,
-            )
-            return 200, {"Cache-Control": "no-store"}, json_bytes({
-                "squad": _native_squad(),
-                "startDateTime": now_s(),
-            })
-        if method == "GET":
-            return 200, {"Cache-Control": "no-store"}, json_bytes({
-                "match": None,
-                "credits": STATE.credits(),
-            })
-        log.warning("MATCH FLOW generic method=%s body=%s", method, doc)
-        return 200, {"Cache-Control": "no-store"}, json_bytes({})
 
-    if low == "/ut/game/fifa15/match/end":
-        doc = payload if isinstance(payload, dict) else {}
-        end_reason = str(doc.get("endReason") or doc.get("result") or "NO_CONTEST").strip().upper()
-        # Offline Seasons treats an in-match quit/DNF as a played loss. Returning
-        # QUIT here made FIFA save the pre-match opaque SeasonData again and then
-        # show Start Season on re-entry. Tell the client the terminal fixture
-        # result is LOSS while still awarding zero coins for the DNF.
-        response_reason = "LOSS" if end_reason in {"QUIT", "DNF", "FORFEIT"} else end_reason
-
-        # A retry after the first terminal settlement must return the exact same
-        # successful award document instead of creating a second result.
-        if not bool(STATE.get("offline_match_pending", False)):
-            cached = STATE.get("last_match_end_response", {})
-            if isinstance(cached, dict) and cached and end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
-                log.warning("SEASONS MATCH END retry returning cached settlement reason=%s", end_reason)
-                return 200, {"Cache-Control": "no-store"}, json_bytes(cached)
-
-        st_before = STATE.offline_season_state()
-        internal_defs = _offline_season_definitions()
-        current = next(
-            (x for x in internal_defs if int(x.get("divisionNumber", 10)) == int(st_before.get("division", 10))),
-            internal_defs[-1],
-        )
-        difficulty = int(current.get("difficulty", 1) or 1)
-
-        raw_items = doc.get("items") if isinstance(doc.get("items"), list) else []
-        stat_items: list[dict[str, Any]] = []
-        allowed = (
-            "shots", "goals", "yellowCards", "redCards", "suspension",
-            "injuryType", "injuryGames", "fitness", "assists",
-        )
-        for raw in raw_items:
-            if not isinstance(raw, dict):
-                continue
-            try:
-                iid = int(raw.get("id", raw.get("itemId", 0)) or 0)
-            except Exception:
-                iid = 0
-            if iid <= 0:
-                continue
-            row: dict[str, Any] = {"id": iid}
-            for key in allowed:
-                if key in raw:
-                    row[key] = raw.get(key)
-            stat_items.append(row)
-
-        # Fitness/stat mutations arriving with DestroyMatch are part of the
-        # authoritative local club state too. Persist them before building the
-        # response so a relaunch cannot restore pre-match fitness/stat values.
-        for row in stat_items:
-            try:
-                STATE.update_item_fields(int(row.get("id", 0) or 0), row)
-            except Exception:
-                pass
-
-        reward = _offline_match_reward(doc, end_reason)
-        seconds_played = int(reward.get("secondsPlayed", 0) or 0)
-        if end_reason in {"QUIT", "DNF", "FORFEIT"} and seconds_played <= 0:
-            # A zero-second terminal response can be interpreted by the client as
-            # a no-contest bootstrap instead of a played DNF. Use the measured
-            # local match lifetime so a user-initiated forfeit is still a real
-            # loss/fixture settlement while receiving zero coins.
-            started_at = int(STATE.get("offline_match_started_at", now_s()) or now_s())
-            seconds_played = max(1, now_s() - started_at)
-        first_settlement = bool(STATE.get("offline_match_pending", False)) and end_reason in {
-            "WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"
-        }
-
-        settled = st_before
-        reward_coins = 0
-        if first_settlement:
-            result_key = "win" if end_reason == "WIN" else "draw" if end_reason == "DRAW" else "loss"
-            mine = doc.get("myMatchStats") if isinstance(doc.get("myMatchStats"), dict) else {}
-            opp = doc.get("opponentMatchStats") if isinstance(doc.get("opponentMatchStats"), dict) else {}
-            gf = max(0, int(mine.get("goals", 0) or 0))
-            ga = max(0, int(opp.get("goals", 0) or 0))
-            settled = STATE.update_offline_season({
-                "result": result_key,
-                "goalsFor": int(st_before.get("goalsFor", 0) or 0) + gf,
-                "goalsAgainst": int(st_before.get("goalsAgainst", 0) or 0) + ga,
-            })
-            record_key = "record_wins" if result_key == "win" else "record_draws" if result_key == "draw" else "record_losses"
-            STATE.set(record_key, int(STATE.get(record_key, 0) or 0) + 1)
-            STATE.set("offline_season_history_goals_for", int(STATE.get("offline_season_history_goals_for", 0) or 0) + gf)
-            STATE.set("offline_season_history_goals_against", int(STATE.get("offline_season_history_goals_against", 0) or 0) + ga)
-
-            # Completed matches receive the award exactly once. Quit/DNF remains
-            # zero so the local economy cannot be farmed through forfeits.
-            if end_reason in {"WIN", "DRAW", "LOSS"}:
-                reward_coins = int(reward.get("rewardCoins", 0) or 0)
-                if reward_coins > 0:
-                    STATE.add_credits(reward_coins)
-                    STATE.set("offline_season_coins", int(STATE.get("offline_season_coins", 0) or 0) + reward_coins)
-
-            # FUT contracts are consumed by players who actually took part in the
-            # fixture. Start with the 11 MatchReady starters, then include any bench
-            # item that appears to have entered play (fitness/stat mutation). This is
-            # performed only on the first terminal settlement, so retries cannot
-            # consume a second contract.
-            participant_ids = set(int(x) for x in (STATE.get("offline_match_starters", []) or []) if int(x or 0) > 0)
-            for row in stat_items:
-                iid = int(row.get("id", 0) or 0)
-                if iid <= 0 or iid in participant_ids:
-                    continue
-                if int(row.get("fitness", 99) or 99) < 99 or any(int(row.get(k, 0) or 0) for k in ("goals","assists","shots","yellowCards","redCards")):
-                    participant_ids.add(iid)
-            contract_updates = STATE.decrement_player_contracts(sorted(participant_ids))
-            STATE.set("offline_match_starters", [])
-            log.warning("MATCH CONTRACTS decremented=%s", [(int(x.get("id",0)), int(x.get("contract",0))) for x in contract_updates])
-
-            # Player/GK training cards are one-match effects. Expire only after
-            # the first terminal settlement so retries cannot consume/restore twice.
-            expired_training = STATE.expire_training_for_items([int(x.get("id", 0) or 0) for x in stat_items])
-
-            # FIFA writes its native SeasonData envelope immediately after
-            # /match/end. For quit/DNF we now return LOSS, which makes the client
-            # author a real next-round blob instead of echoing its pre-match save.
-            STATE.set("awaiting_post_match_season_save", True)
-
-            log.warning(
-                "SEASONS PROGRESSION settled result=%s reward=%s state=%s record=%s-%s-%s",
-                result_key, reward_coins, settled,
-                int(STATE.get("record_wins", 0) or 0),
-                int(STATE.get("record_draws", 0) or 0),
-                int(STATE.get("record_losses", 0) or 0),
-            )
-
-        current_credits = STATE.credits()
-        response: dict[str, Any] = {
-            "endReason": response_reason,
-            "secondsPlayed": seconds_played,
-            "matchDifficulty": difficulty,
-            "items": stat_items,
-            "matchData": str(doc.get("matchData") or ""),
-            "credits": current_credits,
-            "coins": current_credits,
-        }
-
-        if end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
-            completed_normally = end_reason in {"WIN", "DRAW", "LOSS"}
-            # FIFA 15 PC's RS4:FutDestroyMatchServerResponse does NOT consume
-            # our earlier completionAward/skillAward/rewardCoins names.  The
-            # retail decoder reads allCoins, matchCoins, participationAward,
-            # gameModeAward, boostConis (the retail typo), and the multiplier/
-            # partial arrays.  Keep the old aliases for diagnostics, but make
-            # the native fields authoritative so the post-match award screen
-            # can actually render the coins that were already credited locally.
-            native_total = int(reward_coins if first_settlement else reward.get("totalCoins", 0) or 0) if completed_normally else 0
-            native_participation = int(reward.get("completionAward", 0) or 0) if completed_normally else 0
-            native_match = max(0, native_total - native_participation) if completed_normally else 0
-            response.update({
-                "allCoins": native_total,
-                "matchCoins": native_match,
-                "participationAward": native_participation,
-                "gameModeAward": {"coins": 0},
-                "boostConis": 0,
-                "boostCountLeft": 0,
-                "matchCoinMultipliers": [],
-                "matchCoinPartials": [],
-                "seasonCoins": 0,
-                "tournamentCoins": 0,
-                "teamOfTournamentWinner": False,
-
-                # Legacy/local aliases retained so old traces and cached
-                # settlements stay easy to inspect.
-                "completionAward": native_participation,
-                "skillAward": native_match,
-                "rewardCoins": native_total,
-                "totalCoins": native_total,
-                "dnfModifier": float(reward.get("dnfModifier", 1.0) or 1.0),
-                "seasonId": 10,
-                "divisionId": int(settled.get("division", 10) or 10),
-                "seasonRound": max(1, int(settled.get("round", 0) or 0) + 1),
-                "seasonPoints": int(settled.get("points", 0) or 0),
-                "seasonGamesWon": int(settled.get("wins", 0) or 0),
-                "seasonGamesDraw": int(settled.get("draws", 0) or 0),
-                "seasonGamesLost": int(settled.get("losses", 0) or 0),
-            })
-        if first_settlement:
-            refreshed = []
-            for row in stat_items:
-                item = STATE.get_item(int(row.get("id", 0) or 0))
-                if item and str(item.get("itemType", "player")) == "player":
-                    refreshed.append(_native_player_item(item))
-            if refreshed:
-                response["itemData"] = refreshed
-
-        if isinstance(doc.get("myMatchStats"), dict):
-            response["myMatchStats"] = doc["myMatchStats"]
-        if isinstance(doc.get("opponentMatchStats"), dict):
-            response["opponentMatchStats"] = doc["opponentMatchStats"]
-
-        if first_settlement:
-            STATE.set("offline_match_pending", False)
-            STATE.set("last_match_end_response", response)
-
-        if end_reason in {"WIN", "DRAW", "LOSS", "QUIT", "DNF", "FORFEIT"}:
-            log.warning(
-                "MATCH REWARD FIFA15-NATIVE allCoins=%s matchCoins=%s participationAward=%s wallet=%s",
-                int(response.get("allCoins", 0) or 0),
-                int(response.get("matchCoins", 0) or 0),
-                int(response.get("participationAward", 0) or 0),
-                current_credits,
-            )
-
-        log.warning(
-            "SEASONS MATCH END season=10 division=%s round=%s reason=%s body=%s response=%s",
-            int(st_before.get("division", 10) or 10),
-            max(1, int(st_before.get("round", 0) or 0) + 1),
-            end_reason,
-            doc,
-            response,
-        )
-        return 200, {"Cache-Control": "no-store"}, json_bytes(response)
 
 
 
@@ -5319,126 +5548,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
     if low.startswith("/ut/game/fifa15/club/stats/"):
         return 200, {}, json_bytes(_club_stats())
 
-    if low == "/ut/game/fifa15/club":
-        requested_type = str(query.get("type", [""])[0] or "").lower()
-        # Player searches must include cards currently fielded by the active
-        # squad. FIFA still shows them in My Club position filters.
-        if requested_type == "player":
-            items = [x for x in (STATE.list_items("club") + STATE.list_items("squad"))
-                     if str(x.get("itemType", "player")) == "player"]
-        else:
-            items = STATE.list_items("club")
-
-        if requested_type in ("consumable", "development", "training"):
-            items = [x for x in items if int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE]
-        elif requested_type == "manager":
-            items = [x for x in items if str(x.get("itemType", "")).lower() == "manager"]
-        elif requested_type in ("kit", "stadium", "ball", "custom", "badge", "trophy"):
-            wanted = "custom" if requested_type == "badge" else requested_type
-            items = [x for x in items if str(x.get("itemType", "")).lower() == wanted]
-        elif requested_type == "equippables":
-            items = [x for x in items if str(x.get("itemType", "")).lower() in {"kit", "stadium", "ball", "custom"}]
-        elif requested_type and requested_type not in ("any", "-1"):
-            items = [x for x in items if str(x.get("itemType", "")).lower() == requested_type]
-
-        def _qint(name: str, default: int = -1) -> int:
-            try:
-                return int(query.get(name, [default])[0])
-            except Exception:
-                return default
-
-        # Native My Club filters. v0.2.16 parsed none of these, so selecting CM,
-        # LB, nation, league, etc. merely paged the same complete player list.
-        if requested_type == "player":
-            position = str(query.get("position", query.get("pos", [""]))[0] or "").upper()
-            nation = _qint("nation", -1)
-            league = _qint("league", -1)
-            team = _qint("team", -1)
-            level = str(query.get("level", ["any"])[0] or "any").lower()
-            filtered: list[dict[str, Any]] = []
-            for item in items:
-                pos = str(item.get("preferredPosition", "") or "").upper()
-                rating = int(item.get("rating", 0) or 0)
-                rareflag = int(item.get("rareflag", 0) or 0)
-                special = rareflag > 1
-                if position not in ("", "ANY", "-1") and pos != position:
-                    continue
-                if nation >= 0 and int(item.get("nation", -1) or -1) != nation:
-                    continue
-                if league >= 0 and int(item.get("leagueId", -1) or -1) != league:
-                    continue
-                if team >= 0 and int(item.get("teamid", item.get("teamId", -1)) or -1) != team:
-                    continue
-                if level not in ("", "any", "-1"):
-                    if level == "bronze" and not (rating <= 64 and not special): continue
-                    if level == "silver" and not (65 <= rating <= 74 and not special): continue
-                    if level == "gold" and not (rating >= 75 and not special): continue
-                    if level in ("sp", "special") and not special: continue
-                filtered.append(item)
-            items = filtered
-
-        def _club_sort_key(item):
-            try: rating = int(item.get("rating", 0) or 0)
-            except Exception: rating = 0
-            try: rareflag = int(item.get("rareflag", 0) or 0)
-            except Exception: rareflag = 0
-            try: rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
-            except Exception: rid = 0
-            try: iid = int(item.get("id", 0) or 0)
-            except Exception: iid = 0
-            return (-rating, -rareflag, -rid, iid)
-
-        items = sorted(items, key=_club_sort_key)
-        try:
-            count = int(query.get("count", [len(items)])[0] or len(items))
-        except Exception:
-            count = len(items)
-        start = 0
-        for key in ("start", "offset", "startIndex", "startindex"):
-            if key in query:
-                try:
-                    start = max(0, int(query.get(key, [0])[0] or 0))
-                    break
-                except Exception:
-                    pass
-        if start == 0 and "page" in query:
-            try:
-                page = max(1, int(query.get("page", [1])[0] or 1))
-                start = (page - 1) * max(1, count)
-            except Exception:
-                pass
-        page_items = items[start:start + max(0, count)]
-
-        all_club = STATE.list_items("club")
-        all_squad = STATE.list_items("squad")
-        all_players = [x for x in all_club + all_squad if str(x.get("itemType", "player")) == "player"]
-        all_consumables = [x for x in all_club if int(x.get("resourceId", 0) or 0) in CONSUMABLE_BY_RESOURCE]
-        all_cosmetics = [x for x in all_club if str(x.get("itemType", "")).lower() in {"kit","stadium","ball","custom"}]
-        log.info(
-            "CLUB PAGE start=%d count=%d total=%d returned=%d query=%s positions=%s",
-            start, count, len(items), len(page_items), query,
-            sorted({str(x.get('preferredPosition','')) for x in page_items if str(x.get('itemType','player')) == 'player'}),
-        )
-        return 200, {}, json_bytes({
-            "pileClubPlayers": len([x for x in all_players if str(x.get("pile", "club")) == "club"]),
-            "pileSquadPlayers": len([x for x in all_players if str(x.get("pile", "club")) == "squad"]),
-            "pileConsumables": len(all_consumables),
-            "pileManagers": len([x for x in all_club if str(x.get("itemType", "")).lower() == "manager"]),
-            "pileClubItems": len(all_cosmetics),
-            "pileClubTotal": len(all_club) + len(all_squad),
-            "pilePack": len(STATE.list_items("unassigned")),
-            "kitCount": len([x for x in all_cosmetics if x.get("itemType") == "kit"]),
-            "badgeCount": len([x for x in all_cosmetics if x.get("itemType") == "custom"]),
-            "stadiumCount": len([x for x in all_cosmetics if x.get("itemType") == "stadium"]),
-            "ballCount": len([x for x in all_cosmetics if x.get("itemType") == "ball"]),
-            "clubPlayers": len(all_players),
-            "clubItemCount": len(all_club) + len(all_squad),
-            "clubCount": len(all_club) + len(all_squad),
-            "total": len(items),
-            "count": len(page_items),
-            "start": start,
-            "itemData": page_items,
-        })
 
     m_identity = re.fullmatch(r"/ut/game/fifa15/item/(\d+)", low)
     if m_identity and method in ("PUT", "POST"):
@@ -5459,103 +5568,6 @@ def route_fut(method: str, raw_path: str, headers: dict[str, str], body: bytes) 
                     json.dumps(store_payload, ensure_ascii=False))
         return 200, {"Cache-Control": "no-store"}, json_bytes(store_payload)
 
-    if low == "/ut/game/fifa15/purchased/items":
-        if method == "POST":
-            pack_id = int(payload.get("packId", 3)) if isinstance(payload, dict) else 3
-            price = max(0, int(get_pack_cfg(pack_id).get("price", 0)))
-            if isinstance(payload, dict) and int(payload.get("useCredits", 1)):
-                if STATE.credits() < price:
-                    return 200, {}, json_bytes({"duplicateItemIdList": [], "itemData": [], **_credits_payload()})
-                STATE.add_credits(-price)
-            log.warning("CARDS-SCOUT PACK_OPEN_BEGIN packId=%s ownedClub=%d ownedSquad=%d",
-                        pack_id, len(STATE.list_items("club")), len(STATE.list_items("squad")))
-            pack = STATE.create_pack(pack_id)
-            log.warning("CARDS-SCOUT PACK_OPEN_ITEMS ids=%s resources=%s duplicates=%s",
-                        [x.get("id") for x in pack.get("itemData", [])],
-                        [x.get("resourceId") for x in pack.get("itemData", [])],
-                        pack.get("duplicateItemIdList", []))
-            # FIFA's native pack-purchase response uses itemList as the ordered
-            # reveal list.  Do not also send itemData/items here: those extra
-            # aliases caused the PC client to rebuild the collection and fall
-            # back to its resourceId ordering instead of our reveal order.
-            ordered_pack_items = [_native_pack_item(x) for x in pack.get("itemData", [])]
-            real_resources = [x.get("resourceId") for x in ordered_pack_items]
-            ordered_pack_items = [_display_sort_alias(x, i) for i, x in enumerate(ordered_pack_items)]
-            log.warning("PACK DISPLAY ORDER ratings=%s rareflags=%s ids=%s timestamps=%s realResources=%s aliasResources=%s",
-                        [x.get("rating") for x in ordered_pack_items],
-                        [x.get("rareflag") for x in ordered_pack_items],
-                        [x.get("id") for x in ordered_pack_items],
-                        [x.get("timestamp") for x in ordered_pack_items],
-                        real_resources,
-                        [x.get("resourceId") for x in ordered_pack_items])
-            return 200, {}, json_bytes({
-                "numberItems": int(pack.get("numberItems", len(ordered_pack_items))),
-                "purchasedPackId": int(pack.get("purchasedPackId", pack_id)),
-                "duplicateItemIdList": pack["duplicateItemIdList"],
-                # Feed the same desired order through every FIFA 15 response alias.
-                "itemList": ordered_pack_items,
-                "itemData": ordered_pack_items,
-                "items": ordered_pack_items,
-                **_credits_payload(),
-            })
-        # When there are unassigned pack cards, preserve their duplicate markers on
-        # refreshes of purchased/items. With no unassigned cards this stays exactly
-        # the normal empty bootstrap shape used while entering FUT.
-        unassigned = STATE.list_items("unassigned")
-
-        # FIFA refreshes /purchased/items after the pack-open POST and uses this
-        # refreshed itemData order for the reveal/New Items screen. Keep this
-        # order identical to create_pack(): highest rating first.
-        def _unassigned_reveal_sort_key(item):
-            try:
-                rating = int(item.get("rating", 0) or 0)
-            except Exception:
-                rating = 0
-            try:
-                rareflag = int(item.get("rareflag", 0) or 0)
-            except Exception:
-                rareflag = 0
-            try:
-                rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
-            except Exception:
-                rid = 0
-            # Same ordering as create_pack(): specials first, then OVR descending.
-            is_special = bool(item.get("special", False)) or rareflag > 1
-            return (0 if is_special else 1, -rating, -rareflag, -rid)
-
-        unassigned = sorted(unassigned, key=_unassigned_reveal_sort_key)
-
-        duplicate_item_list = []
-        for item in unassigned:
-            try:
-                iid = int(item.get("id", 0) or 0)
-                rid = int(item.get("resourceId", item.get("assetId", 0)) or 0)
-            except Exception:
-                continue
-            owned_item = STATE.owned_player_item_by_resource_id(rid)
-            owned_iid = int(owned_item.get("id", 0) or 0) if isinstance(owned_item, dict) else 0
-            if iid and owned_iid:
-                duplicate_item_list.append({"itemId": iid, "duplicateItemId": owned_iid})
-        native_unassigned = [_native_pack_item(x) for x in unassigned]
-        real_resources = [x.get("resourceId") for x in native_unassigned]
-        # Pack reveals use a response-only resourceId alias to control carousel order.
-        # A market purchase must NEVER use that alias: the search/Assign Now screen
-        # resolves the card art from the real special resourceId. Aliasing IF Rooney
-        # (67162914), for example, turned him into an undefined NOT FOUND card.
-        is_market_purchase = any(int(x.get("lastSalePrice", 0) or 0) > 0 for x in unassigned)
-        if not is_market_purchase:
-            native_unassigned = [_display_sort_alias(x, i) for i, x in enumerate(native_unassigned)]
-        log.warning("UNASSIGNED DISPLAY ORDER source=%s ratings=%s rareflags=%s realResources=%s responseResources=%s",
-                    "market" if is_market_purchase else "pack",
-                    [x.get("rating") for x in native_unassigned],
-                    [x.get("rareflag") for x in native_unassigned],
-                    real_resources,
-                    [x.get("resourceId") for x in native_unassigned])
-        return 200, {}, json_bytes({
-            "numberItems": len(native_unassigned),
-            "duplicateItemIdList": duplicate_item_list,
-            "itemData": native_unassigned,
-        })
 
     # ---- Local AI Transfer Market ---------------------------------------
 
