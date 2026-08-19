@@ -1,0 +1,9 @@
+{
+  "body_kind": "opaque",
+  "body_len": 25,
+  "body_sha256_32": "854630a12e6de56542e0136cf3fcda6a",
+  "headers": {
+    "Content-Type": "text/plain"
+  },
+  "status": 404
+}

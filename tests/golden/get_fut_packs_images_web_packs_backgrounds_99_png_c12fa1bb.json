@@ -1,0 +1,10 @@
+{
+  "body_kind": "opaque",
+  "body_len": 91228,
+  "body_sha256_32": "7068e9731b7f99fff5f8f5bf4b7a56e6",
+  "headers": {
+    "Cache-Control": "public, max-age=3600",
+    "Content-Type": "image/png"
+  },
+  "status": 200
+}
