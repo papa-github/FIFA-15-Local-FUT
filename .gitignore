@@ -1,0 +1,14 @@
+# Claude Code workspace notes
+.claude/
+
+# Build output of BUILD_LAUNCHER.cmd (rebuild from FIFA15LocalFUT_Launcher.cs)
+FIFA15LocalFUT.exe
+
+# Python runtime artifacts
+__pycache__/
+*.pyc
+
+# Local backups and logs
+*.log
+*.bak
+backup/
